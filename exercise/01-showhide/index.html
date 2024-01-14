@@ -30,8 +30,8 @@
     }
 
     function handleClick(elementName) {
-        const element = $("#img"+elementNameCapitalized);
         const elementNameCapitalized = getElementName(elementName);
+        const element = $("#img"+elementNameCapitalized);
         if(element.hasClass("hidden") === true ) {
             element.removeClass("hidden").fadeIn(400);
             $("#btn"+elementNameCapitalized).text("hide "+elementName)
