@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<style>
+    .hidden {
+        display: none;
+    }
+
+    .myImg > img {
+        max-width: 100%;
+    }
+</style>
+<script>
+    function getElementName(elementName) {
+        const firstLettrer = elementName.charAt(0);
+        const remainingLetter = elementName.substring(1);
+        return firstLettrer.toUpperCase()+remainingLetter.toLowerCase();
+    }
+
+    function handleClick(elementName) {
+        const element = $("#img"+elementNameCapitalized);
+        const elementNameCapitalized = getElementName(elementName);
+        if(element.hasClass("hidden") === true ) {
+            element.removeClass("hidden").fadeIn(400);
+            $("#btn"+elementNameCapitalized).text("hide "+elementName)
+        } else {
+            element.fadeOut(400).addClass("hidden");
+            $("#btn"+elementNameCapitalized).text("show "+elementName)
+        }
+    }
+    $(document).ready(function () { 
+        $("#btnMountain").click(function() {
+            handleClick("mountain")
+        });
+        $("#btnHill").click(function() {
+            handleClick("hill")
+        });
+        $("#btnBeach").click(function() {
+            handleClick("beach")
+        });
+    });
+</script>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <h1>Esercizio</h1>
+        </div>
+        <div class="row">
+            <p>
+                Utilizzando JQuery e Bootstrap creare una pagina con 3 sezioni orizzontali, ognuna delle quali con un
+                pulsante che ogni volta che viene cliccato mostra o nasconde una immagine quadrata con effetto fadeIn
+                fadeOut
+                Modificare il layout per risoluzioni superiori a 576 (-md-) in maniera che le sezioni vengano
+                visualizzati in verticale
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-md-4" id="beach">
+                <button class="btn btn-info m-2" id="btnBeach">show beach</button>
+                <figure class="figure hidden myImg" id="imgBeach">
+                    <img src="./beach.png" class="figure-img p-2" alt="beach">
+                    <figcaption class="figure-caption">The beach</figcaption>
+                </figure>
+            </div>
+            <div class="col-xs-12 col-md-4" id="mountain">
+                <button class="btn btn-info m-2" id="btnMountain">show mountain</button>
+                <figure class="figure hidden myImg" id="imgMountain">
+                    <img src="./mountain.png" class="figure-img p-2" alt="Mountains">
+                    <figcaption class="figure-caption">Mountains</figcaption>
+                </figure>
+            </div>
+            <div class="col-xs-12 col-md-4" id="hill">
+                <button class="btn btn-info m-2" id="btnHill">show hill</button>
+                <figure class="figure hidden myImg" id="imgHill">
+                    <img src="./hills.png" class="figure-img p-2" alt="Hills">
+                    <figcaption class="figure-caption">Hills</figcaption>
+                </figure>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
