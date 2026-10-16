@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gabriele Fontana — Software Engineer, Linux Containers & Systems</title>
-  <meta name="description" content="Senior Software Engineer. Node.js, Linux container security (AppArmor, Seccomp, eBPF) e AI per sviluppatori: come le cose si rompono, e come smettere di romperle." />
+  <title>Gabriele Fontana — Senior Software Engineer</title>
+  <meta name="description" content="Senior Software Engineer at RedCarbon. Raised on Linux, passionate about security, distributed systems, and developer tooling." />
   <meta name="author" content="Gabriele Fontana" />
 
   <!-- Google Fonts: Fraunces (Wide, open, editorial serif), Inter (Body), Space Mono & Fira Code (Mono) -->
@@ -26,9 +26,9 @@
 
         <nav class="site-nav" aria-label="Main Navigation">
           <a href="#talks">Talks</a>
-          <a href="#writing">Writing</a>
-          <a href="#projects">Systems</a>
-          <a href="#about">About</a>
+          <a href="#software">Software &amp; Skills</a>
+          <a href="#contributions">Contributions</a>
+          <a href="#community">Community</a>
           <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
             <span>☽</span> DARK
           </button>
@@ -39,120 +39,102 @@
     <!-- Main Asymmetric Magazine Layout -->
     <main class="magazine-grid">
 
-      <!-- LEFT COLUMN: Huge Typography, Articles, Talks, Deep Copy -->
+      <!-- LEFT COLUMN: Huge Typography, Talks, Software, Contributions -->
       <div class="magazine-left">
 
-        <!-- Hero / Manifesto -->
+        <!-- Hero / Intro -->
         <section class="hero-manifesto">
-          <p class="meta-label">DISPATCH 01 · VOL. 2026 · CUNEO, IT</p>
+          <p class="meta-label">PORTFOLIO &amp; NOTES · CUNEO / TORINO, IT</p>
           <h1 class="masthead-title">GABRIELE<br />FONTANA</h1>
 
           <p class="thesis">
-            «Più sicuro» non vuol dire «sicuro».<br />
-            E <em>secure by default</em>… contro cosa?<br />
-            Mi occupo di <strong>sicurezza</strong>, ma resto prima di tutto un <strong>dev</strong>: faccio vedere come le cose si rompono, e cosa succede quando smettiamo di ragionare.
+            Senior Software Engineer. Raised on Linux, passionate about security, distributed systems, and developer tooling.
           </p>
 
           <p class="bio-summary">
-            Senior Software Engineer in <strong>RedCarbon</strong>. Fan di Linux da quando ho imparato sul serio con Slackware, Red Hat 7.2 e OpenSUSE («insomma, sono vecchio»). Sviluppo in TypeScript, Go e Node — so come introdurre bachi in ognuno di essi. Negli ultimi anni mi sono infilato tra kernel, container, AppArmor, Seccomp ed eBPF: per capire dove sta l'anello debole della catena e perché nessun tool, da solo, ti salva.
+            I work at <strong>RedCarbon</strong> on high-reliability software systems. I build primarily with <strong>Go, TypeScript, and Node.js</strong>. I enjoy solving difficult technical problems, understanding how things actually behave under the hood, and testing systems where abstractions tend to break down.
           </p>
         </section>
 
-        <!-- TALKS & KEYNOTES -->
+        <!-- DEDICATED PAST TALKS SECTION -->
         <section id="talks" class="content-section">
           <div class="section-header">
-            <h2>Keynotes &amp; Talks</h2>
-            <span class="meta-label">01 // STAGE</span>
+            <h2>Past Talks</h2>
+            <span class="meta-label">01 // TALKS</span>
           </div>
 
           <article class="article-entry">
-            <div class="meta-label">COME TO CODE 2026 · PIGNOLA (PZ) · SETTEMBRE 2026</div>
+            <div class="meta-label">COME TO CODE 2026 · PIGNOLA, ITALY · SEP 2026</div>
             <h3 class="article-entry-title">
-              <a href="article-container-at-war.html">Container at War: perché «distroless» non basta</a>
+              <a href="article-container-at-war.html">Container at War: Distroless is Not Enough</a>
             </h3>
             <p class="article-desc">
-              «Ho portato a Pignola un container distroless e l'ho bucato davanti a tutti.» Niente shell nell'immagine, command injection comunque riuscita: l'interprete applicativo stesso diventa la shell. Demo live su Docker locale e cluster GKE vero, per mostrare come AppArmor, filtri Seccomp e shift-left ribaltano l'esito quando smettiamo di fidarci ciecamente delle buzzword.
+              Live attacks against Node.js and Go containers on Docker and Google Kubernetes Engine (GKE). Demonstrating that stripping the shell is not enough when application vulnerabilities exist, and showing how AppArmor LSM profiles, Seccomp-BPF filters, and shift-left security change the outcome.
             </p>
             <div class="article-links">
-              <a href="article-container-at-war.html" class="badge">Leggi l'articolo &rarr;</a>
+              <a href="article-container-at-war.html" class="badge">Read Article &rarr;</a>
               <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">Slides &amp; Demo Repo &nearr;</a>
               <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">Profiler Skill &nearr;</a>
             </div>
           </article>
 
           <article class="article-entry">
-            <div class="meta-label">IN PREPARAZIONE · AWS USER GROUP CUNEO · 2026</div>
+            <div class="meta-label">TECH SESSION · BENCHMARKS &amp; RUNTIME</div>
             <h3 class="article-entry-title">
-              Hardening pratico: dai container alle macchine su AWS
+              Node.js Performance: Under the Hood
             </h3>
             <p class="article-desc">
-              Meno live attack scenografici e molto più pragmatismo operativo. Spostiamo il campo da GCP ad AWS (ECS, EKS, nodi Bottlerocket ed EC2): come sfornare immagini e template di nodi con profili CIS già pronti, seccomp restrittivi e automazione senza rompere la produzione.
+              Measuring asynchronous performance, event loop latency, and garbage collection behavior. Looking at what actually slows down real-world Node.js services beyond micro-benchmarks.
             </p>
             <div class="article-links">
-              <span class="badge">In arrivo</span>
-              <span class="meta-label">Topic: AWS ECS/EKS · Bottlerocket · CIS Benchmark</span>
+              <span class="badge">Slides Archive</span>
+              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">GitHub Repo &nearr;</a>
             </div>
           </article>
         </section>
 
-        <!-- WRITING & DISPATCHES -->
-        <section id="writing" class="content-section">
+        <!-- SOFTWARE & PUBLISHED SKILLS SECTION -->
+        <section id="software" class="content-section">
           <div class="section-header">
-            <h2>Writings &amp; Dispatches</h2>
-            <span class="meta-label">02 // FIELD NOTES</span>
+            <h2>Software &amp; Skills</h2>
+            <span class="meta-label">02 // CODE &amp; TOOLS</span>
           </div>
 
           <article class="article-entry">
-            <div class="meta-label">KEYNOTE ESSAY · 10 MIN READ</div>
+            <div class="meta-label">CLI TOOLS · GO &amp; NODE.JS</div>
             <h3 class="article-entry-title">
-              <a href="article-container-at-war.html">Container at War: il resoconto completo delle demo e dell'hardening</a>
+              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova &amp; trova</a>
             </h3>
             <p class="article-desc">
-              Un path traversal e mi sono ritrovato il token del cluster Kubernetes. LFI, esecuzione in memoria via <code>memfd_create</code> e contromisure nel kernel: il walkthrough tecnico con tutto il codice per riprodurre attacco e difesa.
-            </p>
-            <div class="article-links">
-              <a href="article-container-at-war.html" class="badge">Leggi articolo completo &rarr;</a>
-            </div>
-          </article>
-
-          <article class="article-entry">
-            <div class="meta-label">AI &amp; SECURITY TOOLING · DISPATCH</div>
-            <h3 class="article-entry-title">
-              L'AI propone, la persona decide: generare profili di sicurezza con un umano nel loop
-            </h3>
-            <p class="article-desc">
-              Scrivere profili Seccomp e AppArmor a mano fa scappare chiunque. Come addestrare e vincolare un agente CLI a fare il lavoro sporco di profilazione delle syscall, senza mai delegare a scatola chiusa la policy di sicurezza.
-            </p>
-          </article>
-        </section>
-
-        <!-- SELECTED PROJECTS -->
-        <section id="projects" class="content-section">
-          <div class="section-header">
-            <h2>Selected Systems</h2>
-            <span class="meta-label">03 // CODE &amp; OS</span>
-          </div>
-
-          <article class="article-entry">
-            <div class="meta-label">CLI &amp; TERMINAL TOOLING · GO</div>
-            <h3 class="article-entry-title">
-              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova</a>
-            </h3>
-            <p class="article-desc">
-              Cercare file e pacchetti dal terminale ad altissima velocità. Scritto per puro amore della riga di comando in Go: senza fronzoli, reattivo, per chi vive nel terminale.
+              Fast command-line utilities to search and inspect packages and file paths directly from the terminal without leaving your workflow. Originally built in Node.js (<code>trova</code>), then re-engineered in Go (<code>gotrova</code>) for instant startup and speed.
             </p>
             <div class="article-links">
               <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">github.com/gafreax/gotrova &nearr;</a>
+              <a href="https://github.com/gafreax/trova" target="_blank" rel="noopener noreferrer">github.com/gafreax/trova &nearr;</a>
             </div>
           </article>
 
           <article class="article-entry">
-            <div class="meta-label">SECURITY AUTOMATION · AI HARNESS</div>
+            <div class="meta-label">WEB TOOLING · TYPESCRIPT</div>
+            <h3 class="article-entry-title">
+              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch</a>
+            </h3>
+            <p class="article-desc">
+              A standalone CSS optimizer and minifier written in TypeScript with zero external dependencies, robust AST parsing, and high compression efficiency.
+            </p>
+            <div class="article-links">
+              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch docs &nearr;</a>
+              <a href="https://github.com/gafreax/csscrunch" target="_blank" rel="noopener noreferrer">Source Repo &nearr;</a>
+            </div>
+          </article>
+
+          <article class="article-entry">
+            <div class="meta-label">PUBLISHED AGENT SKILL · LINUX SECURITY</div>
             <h3 class="article-entry-title">
               <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">skill-seccomp-apparmor-profiler</a>
             </h3>
             <p class="article-desc">
-              Ho chiesto a un LLM di analizzare le syscall usate da un processo e generare le allowlist Seccomp e i profili AppArmor. Poi ho provato a bucarlo.
+              An automated skill and harness designed to parse Linux runtime syscall traces and synthesize strict Seccomp-BPF allowlists and AppArmor confinement profiles with human-in-the-loop verification.
             </p>
             <div class="article-links">
               <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">github.com/gafreax/skill-seccomp-apparmor-profiler &nearr;</a>
@@ -160,41 +142,57 @@
           </article>
 
           <article class="article-entry">
-            <div class="meta-label">WEB SYSTEMS · TYPESCRIPT &amp; NODE</div>
+            <div class="meta-label">PUBLISHED SKILL · ENGINEERING PRACTICES</div>
             <h3 class="article-entry-title">
-              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch &amp; Fastify Ecosystem</a>
+              <a href="https://github.com/gafreax/xp-mentoring" target="_blank" rel="noopener noreferrer">xp-mentoring</a>
             </h3>
             <p class="article-desc">
-              Ho scritto un minificatore e ottimizzatore CSS in TypeScript per divertimento: ha 7 stelle e ne vado fiero. Contributi attivi al core di Fastify (<code>fastify-static</code>, <code>fastify-cli</code>): la repro minima è la cosa più gentile che puoi fare per un maintainer.
+              Workflows and structured exercises centered on Extreme Programming (XP), pair programming routines, iterative feedback, and teaching software craft to developers.
             </p>
             <div class="article-links">
-              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch docs &nearr;</a>
-              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">GitHub Profile &nearr;</a>
+              <a href="https://github.com/gafreax/xp-mentoring" target="_blank" rel="noopener noreferrer">github.com/gafreax/xp-mentoring &nearr;</a>
             </div>
           </article>
         </section>
 
-        <!-- ABOUT & PHILOSOPHY -->
-        <section id="about" class="content-section">
+        <!-- CONTRIBUTIONS & COMMUNITY SECTION -->
+        <section id="contributions" class="content-section">
           <div class="section-header">
-            <h2>About &amp; Colophon</h2>
-            <span class="meta-label">04 // ROOTS</span>
+            <h2>Contributions &amp; Community</h2>
+            <span class="meta-label">03 // ECOSYSTEM</span>
           </div>
 
-          <div class="prose">
-            <p>
-              «Full-stack vuol dire che so scrivere bug in Go, in Node e in React. Tripla superficie d'attacco.»
+          <article class="article-entry">
+            <div class="meta-label">OPEN SOURCE · FASTIFY ECOSYSTEM</div>
+            <h3 class="article-entry-title">
+              Fastify Core &amp; Ecosystem Contributions
+            </h3>
+            <p class="article-desc">
+              Active contributions across the Fastify ecosystem (including <code>fastify-static</code> and <code>fastify-cli</code>), covering bug fixes, symlink resolution issues, and minimal reproduction cases for upstream maintainers.
             </p>
-            <p>
-              Programmo da prima che i monitor fossero piatti. Negli anni ho fatto pair programming, insegnato sviluppo web a chi non aveva mai visto un terminale, e approfondito architetture distribuite, Linux security e tool per developer.
+            <div class="article-links">
+              <a href="https://github.com/fastify/fastify" target="_blank" rel="noopener noreferrer">Fastify Org &nearr;</a>
+              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">github.com/gafreax &nearr;</a>
+            </div>
+          </article>
+
+          <article id="community" class="article-entry">
+            <div class="meta-label">COMMUNITY EVENTS &amp; MEETUPS</div>
+            <h3 class="article-entry-title">
+              Open Source Saturday &amp; Go Meetup Torino
+            </h3>
+            <p class="article-desc">
+              Engaged in community initiatives and technical exchanges in the Piedmont area:
             </p>
-            <blockquote>
-              «Non sono le buzzword a salvarci: è un processo, e la verifica di cosa abbiamo fatto davvero.»
-            </blockquote>
-            <p>
-              Quando non attacco container per dimostrare che le blacklist falliscono, costruisco tool CLI, partecipo alle community e lavoro sull'integrazione pragmatica degli agenti AI nel flusso di lavoro quotidiano.
-            </p>
-          </div>
+            <ul style="margin: 0.5rem 0 1rem 1.5rem; color: var(--text-secondary); font-size: var(--text-base); line-height: 1.6;">
+              <li><strong>Open Source Saturday</strong>: Collaborative open-source building and pairing sessions. Follow upcoming editions on <a href="https://lu.ma" target="_blank" rel="noopener noreferrer">Luma</a>.</li>
+              <li><strong>Go Meetup Torino</strong>: Local meetups and deep-dives on the Go programming language, concurrency patterns, and backend architecture.</li>
+            </ul>
+            <div class="article-links">
+              <a href="https://lu.ma" target="_blank" rel="noopener noreferrer" class="badge">Open Source Saturday on Luma &nearr;</a>
+              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">Community Projects &nearr;</a>
+            </div>
+          </article>
         </section>
 
       </div>
@@ -226,48 +224,44 @@
 | Namespaces &amp; Cgroups              |
 +-----------------------------------+</div>
           <p class="article-desc" style="font-size: var(--text-xs); margin-top: 0.75rem;">
-            Il tuo container non ha un kernel: usa il mio. Se il runtime applicativo cade, l'isolamento deve stare nel kernel.
+            When application code is compromised, kernel security modules (Seccomp and AppArmor) provide the boundary that confines execution.
           </p>
         </div>
 
-        <!-- Info Card: Current Dispatch / Status -->
+        <!-- Info Card: Metadata & Dispatch -->
         <div class="info-box">
           <div class="info-box-header">
             <span>METADATA</span>
-            <span>DISPATCH</span>
+            <span>PROFILE</span>
           </div>
           <ul class="meta-list">
             <li>
               <span class="label">LOCATION</span>
-              <span class="val">Cuneo (CN), Italy</span>
+              <span class="val">Cuneo / Torino, IT</span>
             </li>
             <li>
               <span class="label">ROLE</span>
               <span class="val">Senior SE @ RedCarbon</span>
             </li>
             <li>
-              <span class="label">ROOTS</span>
-              <span class="val">Slackware · Linux fan</span>
+              <span class="label">BACKGROUND</span>
+              <span class="val">Linux &amp; Systems</span>
             </li>
             <li>
-              <span class="label">PRIMARY STACK</span>
-              <span class="val">Go · Node · Linux · TS</span>
+              <span class="label">STACK</span>
+              <span class="val">Go · TypeScript · Node</span>
             </li>
             <li>
-              <span class="label">UPCOMING TALK</span>
-              <span class="val">AWS UG Cuneo (Prep)</span>
-            </li>
-            <li>
-              <span class="label">STATUS</span>
-              <span class="val">Available for talks</span>
+              <span class="label">COMMUNITY</span>
+              <span class="val">OSS Saturday · Go Torino</span>
             </li>
           </ul>
         </div>
 
-        <!-- Margin Note / Editorial Quote -->
+        <!-- Margin Note / Principle -->
         <div class="margin-note">
-          <strong>L'Anello Più Debole</strong>
-          L'anello più debole di una catena di sicurezza equivale alla sicurezza dell'intero sistema. Nessun tool, da solo, è "la sicurezza".
+          <strong>Core Principle</strong>
+          The weakest link of a security chain determines the strength of the whole system. No single tool or default replaces understanding your execution path.
         </div>
 
         <!-- Direct Contact Box -->
@@ -307,7 +301,7 @@
           <li><a href="https://www.linkedin.com/in/gabrielefontana/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
           <li><a href="mailto:gafreax@gmail.com">Email</a></li>
           <li><a href="#talks">Talks</a></li>
-          <li><a href="#writing">Writing</a></li>
+          <li><a href="#software">Software</a></li>
         </ul>
       </div>
     </footer>

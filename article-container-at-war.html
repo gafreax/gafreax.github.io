@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Container at War: Dietro le Quinte del Talk e dell'Hardening — Gabriele Fontana</title>
-  <meta name="description" content="Distroless non basta. Il resoconto tecnico del talk tenuto a Come To Code 2026: anatomia degli exploit a runtime, AppArmor, Seccomp e la preparazione per l'AWS talk." />
+  <title>Container at War: Behind the Scenes of the Live Demos &amp; Hardening — Gabriele Fontana</title>
+  <meta name="description" content="Distroless is not enough. The technical debrief of the keynote talk at Come To Code 2026: runtime exploit mechanics, AppArmor, Seccomp, and practical defense." />
   <meta name="author" content="Gabriele Fontana" />
 
   <!-- Google Fonts: Fraunces, Inter, Space Mono, Fira Code -->
@@ -25,9 +25,9 @@
         </a>
 
         <nav class="site-nav" aria-label="Main Navigation">
-          <a href="index.html#talks">&larr; Indice Talks</a>
-          <a href="index.html#writing">Writing</a>
-          <a href="index.html#projects">Systems</a>
+          <a href="index.html#talks">&larr; Back to Talks</a>
+          <a href="index.html#software">Software</a>
+          <a href="index.html#contributions">Contributions</a>
           <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
             <span>☽</span> DARK
           </button>
@@ -42,12 +42,12 @@
       <article class="magazine-left">
 
         <header class="article-header">
-          <p class="meta-label">KEYNOTE DISPATCH · COME TO CODE 2026 · PIGNOLA (PZ)</p>
+          <p class="meta-label">KEYNOTE DISPATCH · COME TO CODE 2026 · PIGNOLA, ITALY</p>
           <h1 class="headline-huge" style="margin: 0.75rem 0 1.5rem;">
-            Container at War: perché «distroless» non basta e come difendersi davvero
+            Container at War: Why «Distroless» is Not Enough and How to Defend Your Workloads
           </h1>
           <p class="lede">
-            Un'immagine minimale toglie la shell e i binari di sistema all'attaccante. Ma quando il codice applicativo presenta una falla, l'interprete stesso diventa l'arma.
+            A minimal container image strips away the shell and standard utilities. But when an application has an execution flaw, the runtime interpreter itself becomes the weapon.
           </p>
         </header>
 
@@ -55,51 +55,50 @@
 
         <div class="prose">
 
-          <h2>1. L'illusione della superficie ridotta</h2>
+          <h2>1. The False Sense of Security in Minimal Images</h2>
           <p>
-            Negli ultimi anni, il mantra dell'industria cloud native è stato categorico: <em>«usa immagini Distroless o Alpine, rimuovi <code>/bin/sh</code>, togli <code>curl</code> e <code>wget</code>, e sarai al sicuro»</em>.
+            In recent years, cloud-native best practices have settled on a standard recommendation: <em>«Use Distroless or minimal Alpine bases, remove <code>/bin/sh</code>, delete <code>curl</code> and <code>wget</code>, and you are protected.»</em>
           </p>
           <p>
-            È un ottimo primo passo di igiene, ma confonde la <strong>superficie di installazione</strong> con la <strong>superficie di esecuzione</strong>. Se un'applicazione Node.js o Go soffre di una vulnerabilità di tipo Local File Inclusion (LFI) o Remote Code Execution (RCE) tramite deserializzazione o prototype pollution, l'attaccante non ha bisogno di chiamare un binario bash esterno. Può eseguire codice direttamente nello spazio di memoria dell'interprete:
+            While minimal images provide clean hygiene and reduce common vulnerability scanners' noise, they address <strong>installation surface</strong> rather than <strong>execution surface</strong>. When an application written in Node.js or Go suffers from a Local File Inclusion (LFI) flaw or an arbitrary memory execution path, an attacker does not need an external bash binary. They can operate straight within the process space:
           </p>
 
-          <pre><code>// Esempio: lettura arbitraria della memoria o di file protetti
-// anche all'interno di un container privo di shell
+          <pre><code>// Reading sensitive files in memory, even inside a shell-less container
 const fs = require('fs');
-const secret = fs.readFileSync('/etc/passwd', 'utf8');
-process.stdout.write(secret);</code></pre>
+const token = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
+process.stdout.write(token);</code></pre>
 
-          <h2>2. Il test sul campo a Come To Code 2026</h2>
+          <h2>2. The Live Arena at Come To Code 2026</h2>
           <p>
-            Durante il talk a Pignola abbiamo allestito un'arena con due ambienti paralleli: un cluster <strong>GKE</strong> e un demone <strong>Docker locale</strong>, bersagliati in diretta da exploit mirati.
+            During the keynote at Come To Code 2026, we demonstrated this reality across two parallel environments: a local Docker daemon and a real Google Kubernetes Engine (GKE) cluster.
           </p>
           <p>
-            Nel primo round, l'applicazione compromessa girava su un container Node.js "distroless" non isolato. L'attacco ha esfiltrato file di configurazione, scansionato la rete interna del cluster e invocato chiamate di sistema arbitrarie.
+            In the unhardened round, an LFI vulnerability allowed the attacker to reach the mounted Kubernetes service account token, inspect network interfaces, and invoke arbitrary system calls.
           </p>
           <p>
-            Nel secondo round, abbiamo attivato la vera armatura: <strong>AppArmor</strong> per il confinamento dei file e delle capability, e <strong>Seccomp</strong> in modalità allowlist per bloccare alla radice le syscall non ammesse (come <code>ptrace</code> o tentativi di esecuzione di fileless shellcode in memoria).
+            In the second round, kernel security controls were activated: <strong>AppArmor LSM</strong> to enforce strict path confinement and deny sensitive file access, and <strong>Seccomp-BPF</strong> filters to restrict allowed syscalls to an application-specific allowlist.
           </p>
 
           <blockquote>
-            «Non puoi invocare ciò che il kernel si rifiuta categoricamente di eseguire.»
+            «An attacker cannot execute what the kernel categorically refuses to dispatch.»
           </blockquote>
 
-          <h2>3. Il tassello mancante: l'Hardening delle macchine (e l'approccio AWS)</h2>
+          <h2>3. Practical Hardening: Bridging Applications and Infrastructure</h2>
           <p>
-            In un talk di 45 minuti non c'è il tempo di coprire tutto. Come ha ben argomentato il collega <strong>Matteo Madeddu</strong> nel suo riferimento su <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">docker-security (capabilities e least privilege)</a>, l'isolamento dei container non può prescindere dall'hardening del nodo host e dai profili delle immagini.
+            Security is a chain, and the weakest link determines the outcome. As my colleague <strong>Matteo Madeddu</strong> highlighted in his reference on <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">Docker security and Linux capabilities</a>, container defense requires host-level awareness and disciplined profile management.
           </p>
           <p>
-            Ed è proprio qui che si proietta il prossimo talk per l'<strong>AWS User Group di Cuneo</strong>:
+            Key takeaways for production container defense:
           </p>
           <ul>
-            <li><strong>Meno live exploitation e più pragmatismo operativo</strong>: come sfornare template di nodi EC2 ed EKS (es. con <em>Bottlerocket OS</em>) già pronti con configurazioni di hardening conformi ai benchmark CIS.</li>
-            <li><strong>Automazione dei profili Seccomp/AppArmor</strong>: come catturare i trace in staging con tool come il nostro <code>skill-seccomp-apparmor-profiler</code> e distribuirli sui nodi tramite Kubernetes Security Profiles Operator (SPO) o daemon set.</li>
-            <li><strong>Integrazione nativa con AWS</strong>: gestione dell'identity con IAM Roles for Service Accounts (IRSA / EKS Pod Identity) evitando l'esposizione dei metadati dell'istanza (IMDSv2 obbligatorio).</li>
+            <li><strong>Automated Syscall Profiling</strong>: Using tools like our <code>skill-seccomp-apparmor-profiler</code> to trace legitimate process execution in staging environments, drafting allowlists with deterministic verification.</li>
+            <li><strong>Least Privilege by Default</strong>: Dropping all unnecessary Linux capabilities (<code>--cap-drop=ALL</code>) and strictly forbidding privilege escalation (<code>allowPrivilegeEscalation: false</code>).</li>
+            <li><strong>Host and Node Baseline</strong>: Ensuring nodes (whether EC2, Bottlerocket, or GKE) enforce CIS benchmarks and enforce IMDSv2 to prevent cloud credential exfiltration.</li>
           </ul>
 
-          <h2>4. Materiali e codice sorgente</h2>
+          <h2>4. Slides &amp; Code</h2>
           <p>
-            Tutte le slide del talk originale, i Dockerfile vulnerabili e corretti, e gli script di automazione per riprodurre il cluster sono pubblici nel repository:
+            The full slide deck, vulnerable demo targets, and automated setup scripts are open source and available on GitHub:
           </p>
           <p>
             &rarr; <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer"><strong>github.com/gafreax/container-at-war</strong></a>
@@ -127,16 +126,16 @@ process.stdout.write(secret);</code></pre>
               <span class="val">Come To Code '26</span>
             </li>
             <li>
-              <span class="label">DATE</span>
-              <span class="val">Sep 2026</span>
+              <span class="label">LOCATION</span>
+              <span class="val">Pignola (PZ), Italy</span>
             </li>
             <li>
               <span class="label">READING TIME</span>
               <span class="val">8 min</span>
             </li>
             <li>
-              <span class="label">NEXT STOP</span>
-              <span class="val">AWS UG Cuneo</span>
+              <span class="label">TOPICS</span>
+              <span class="val">Seccomp · AppArmor</span>
             </li>
           </ul>
         </div>
@@ -147,23 +146,24 @@ process.stdout.write(secret);</code></pre>
             <span>COMPARISON</span>
             <span>DEFENSE</span>
           </div>
-          <div class="diagram-box">
-[SENZA HARDENING]
-Payload -> LFI -> Read /etc/shadow
-Payload -> MemExec -> Shellcode OK
-
-[CON SECCOMP + APPARMOR]
-Payload -> LFI -> EPERM (AppArmor)
-Payload -> MemExec -> SIGSYS (Kernel Kill)</div>
+          <div class="diagram-box">+------------------------------------+
+| [WITHOUT HARDENING]                |
+| Payload -> LFI -> Read SA Token    |
+| Payload -> MemExec -> Shellcode OK |
++------------------------------------+
+| [WITH SECCOMP + APPARMOR]          |
+| Payload -> LFI -> EPERM (AppArmor) |
+| Payload -> MemExec -> SIGSYS (Kill)|
++------------------------------------+</div>
           <p class="article-desc" style="font-size: var(--text-xs); margin-top: 0.75rem;">
-            Il filtro blocca l'attacco a livello kernel prima ancora che l'applicazione possa completare l'azione illecita.
+            Kernel filters intercept and terminate illicit syscalls before user-space code completes the operation.
           </p>
         </div>
 
         <!-- Recommended Reading Margin Note -->
         <div class="margin-note">
-          <strong>Riferimento Consigliato</strong>
-          Per un approfondimento dettagliato sulle Linux Capabilities e i limiti di risorsa in Docker, vedi l'articolo di Matteo Madeddu: <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">madeddu.xyz/posts/docker-security</a>.
+          <strong>Recommended Reference</strong>
+          For a thorough deep-dive on Linux capabilities and resource constraints in Docker, read Matteo Madeddu's article: <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">madeddu.xyz/posts/docker-security</a>.
         </div>
 
       </aside>
