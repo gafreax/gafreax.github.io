@@ -1,28 +1,312 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="description" content="Imagine any website, generated in real-time by Gemini 3.1 Flash-Lite" />
-    <meta name="author" content="Ben Cobley, Google DeepMind" />
-    <link rel="author" href="https://x.com/cobley_ben" />
-    <title>Gabriele Fontana - 16-bit Portfolio</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@400;500;600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
-    <link rel="stylesheet" href="/index.css">
-    <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-        background: #000;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gabriele Fontana — Software Engineer, Linux Containers & Systems</title>
+  <meta name="description" content="Senior Software Engineer. Node.js, Linux container security (AppArmor, Seccomp, eBPF) e AI per sviluppatori: come le cose si rompono, e come smettere di romperle." />
+  <meta name="author" content="Gabriele Fontana" />
+
+  <!-- Google Fonts: Fraunces (Wide, open, editorial serif), Inter (Body), Space Mono & Fira Code (Mono) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..800;1,400..800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-wrapper">
+
+    <!-- Masthead Header Bar -->
+    <header class="site-header">
+      <div class="header-inner">
+        <a href="index.html" class="site-logo">
+          <strong>GF</strong> <span>/ GABRIELE FONTANA</span>
+        </a>
+
+        <nav class="site-nav" aria-label="Main Navigation">
+          <a href="#talks">Talks</a>
+          <a href="#writing">Writing</a>
+          <a href="#projects">Systems</a>
+          <a href="#about">About</a>
+          <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
+            <span>☽</span> DARK
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Asymmetric Magazine Layout -->
+    <main class="magazine-grid">
+
+      <!-- LEFT COLUMN: Huge Typography, Articles, Talks, Deep Copy -->
+      <div class="magazine-left">
+
+        <!-- Hero / Manifesto -->
+        <section class="hero-manifesto">
+          <p class="meta-label">DISPATCH 01 · VOL. 2026 · CUNEO, IT</p>
+          <h1 class="masthead-title">GABRIELE<br />FONTANA</h1>
+
+          <p class="thesis">
+            «Più sicuro» non vuol dire «sicuro».<br />
+            Porto la sicurezza dei <strong>container</strong> e del <strong>kernel Linux</strong> nel mondo di chi scrive applicazioni, con demo live che si rompono apposta.
+          </p>
+
+          <p class="bio-summary">
+            Senior Software Engineer specializzato in Node.js, architetture distribuite e sicurezza applicativa (AppArmor, Seccomp, eBPF). Credo nel software minimale, negli strumenti ben progettati e nel mostrare esattamente come funzionano le cose sotto il cofano.
+          </p>
+        </section>
+
+        <!-- TALKS & KEYNOTES -->
+        <section id="talks" class="content-section">
+          <div class="section-header">
+            <h2>Keynotes & Talks</h2>
+            <span class="meta-label">01 // STAGE</span>
+          </div>
+
+          <article class="article-entry">
+            <div class="meta-label">COME TO CODE 2026 · PIGNOLA (PZ) · SETTEMBRE 2026</div>
+            <h3 class="article-entry-title">
+              <a href="article-container-at-war.html">Container at War: Distroless is Not Enough</a>
+            </h3>
+            <p class="article-desc">
+              Live attack contro container Node.js e Go su Docker e GKE. Abbiamo dimostrato come un’immagine minimale distroless non protegga da exploit a runtime, e come l’adozione sistematica di profili AppArmor, filtri Seccomp e sicurezza shift-left capovolga l’esito dell’attacco.
+            </p>
+            <div class="article-links">
+              <a href="article-container-at-war.html" class="badge">Leggi l'articolo &rarr;</a>
+              <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">Slides &amp; Demo Repo &nearr;</a>
+              <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">Profiler Skill &nearr;</a>
+            </div>
+          </article>
+
+          <article class="article-entry">
+            <div class="meta-label">IN PREPARAZIONE · AWS USER GROUP CUNEO · 2026</div>
+            <h3 class="article-entry-title">
+              Container Hardening su AWS: dai Principi ai Profili Pratici
+            </h3>
+            <p class="article-desc">
+              Evoluzione pratica di <em>Container at War</em>: spostiamo il focus da GCP ad AWS (ECS, EKS, nodi Bottlerocket ed EC2). Meno live attack scenografici e molto più focus operativo su come generare macchine e immagini già corazzate con profili CIS, seccomp restrittivi e seccomp-operator automatici.
+            </p>
+            <div class="article-links">
+              <span class="badge">In arrivo</span>
+              <span class="meta-label">Topic: AWS ECS/EKS · Bottlerocket · CIS Benchmark</span>
+            </div>
+          </article>
+        </section>
+
+        <!-- WRITING & DISPATCHES -->
+        <section id="writing" class="content-section">
+          <div class="section-header">
+            <h2>Writings & Dispatches</h2>
+            <span class="meta-label">02 // FIELD NOTES</span>
+          </div>
+
+          <article class="article-entry">
+            <div class="meta-label">ARTICOLO DIRETTO · 12 MIN READ</div>
+            <h3 class="article-entry-title">
+              <a href="article-container-at-war.html">Container at War: il resoconto completo del talk e delle contromisure</a>
+            </h3>
+            <p class="article-desc">
+              Il walkthrough tecnico passo dopo passo: la superficie d'attacco di un container "distroless", l'anatomia di una backdoor via dipendenze, e come confinare un processo attraverso seccomp-bpf e AppArmor senza rompere la produzione.
+            </p>
+            <div class="article-links">
+              <a href="article-container-at-war.html" class="badge">Leggi articolo completo &rarr;</a>
+            </div>
+          </article>
+
+          <article class="article-entry">
+            <div class="meta-label">SISTEMI &amp; DESIGN · IN ARRIVO</div>
+            <h3 class="article-entry-title">
+              Agenti AI per developer: generare profili di sicurezza con un umano nel loop
+            </h3>
+            <p class="article-desc">
+              Costruire profili Seccomp e AppArmor a mano è un incubo da cui tutti scappano. Come addestrare e vincolare un agente CLI a fare il lavoro noioso: profilare le syscall usate e redigere le allowlist con verifica deterministica.
+            </p>
+          </article>
+        </section>
+
+        <!-- SELECTED PROJECTS -->
+        <section id="projects" class="content-section">
+          <div class="section-header">
+            <h2>Selected Systems</h2>
+            <span class="meta-label">03 // CODE &amp; OS</span>
+          </div>
+
+          <article class="article-entry">
+            <div class="meta-label">CLI &amp; SYSTEMS TOOLING · GO</div>
+            <h3 class="article-entry-title">
+              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova</a>
+            </h3>
+            <p class="article-desc">
+              Strumento da terminale ultra-rapido per l'indicizzazione e la ricerca interattiva di file e percorsi nel filesystem locale, ottimizzato per flussi di lavoro ad alta velocità.
+            </p>
+            <div class="article-links">
+              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">github.com/gafreax/gotrova &nearr;</a>
+            </div>
+          </article>
+
+          <article class="article-entry">
+            <div class="meta-label">SECURITY AUTOMATION · AI HARNESS</div>
+            <h3 class="article-entry-title">
+              <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">skill-seccomp-apparmor-profiler</a>
+            </h3>
+            <p class="article-desc">
+              Skill e profiler per analizzare tracce di esecuzione dei processi, isolare le syscall e redigere automaticamente policy Seccomp e profili AppArmor per container Linux.
+            </p>
+            <div class="article-links">
+              <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">github.com/gafreax/skill-seccomp-apparmor-profiler &nearr;</a>
+            </div>
+          </article>
+
+          <article class="article-entry">
+            <div class="meta-label">ECOSISTEMA NODE.JS / WEB</div>
+            <h3 class="article-entry-title">
+              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch</a>
+            </h3>
+            <p class="article-desc">
+              Ottimizzatore e minificatore CSS ad alte prestazioni in TypeScript con parsing robusto e output compatto.
+            </p>
+            <div class="article-links">
+              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch docs &nearr;</a>
+              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">Contributi Fastify Core &nearr;</a>
+            </div>
+          </article>
+        </section>
+
+        <!-- ABOUT & PHILOSOPHY -->
+        <section id="about" class="content-section">
+          <div class="section-header">
+            <h2>About &amp; Principles</h2>
+            <span class="meta-label">04 // COLOPHON</span>
+          </div>
+
+          <div class="prose">
+            <p>
+              Programmo da quando i monitor pesavano venti chili. Ho costruito la mia carriera partendo dall'ecosistema Linux e dal web moderno, focalizzandomi negli anni su <strong>Node.js, TypeScript, Go e sicurezza del kernel Linux</strong>.
+            </p>
+            <blockquote>
+              «La semplicità non è l'assenza di complessità, ma la sua risoluzione rigorosa.»
+            </blockquote>
+            <p>
+              Oggi mi divido tra la progettazione di sistemi backend resilienti, la didattica (insegno sviluppo e architetture software) e la ricerca applicata: come rendere gli agenti AI davvero utili ai developer su compiti concreti e verificabili, senza fuffa.
+            </p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Asymmetric Infographics, Architecture Diagrams, Margin Notes -->
+      <aside class="magazine-right sticky-col" aria-label="Sidebar Context & Infographics">
+
+        <!-- Info Card: Container Defense Layers Diagram -->
+        <div class="info-box">
+          <div class="info-box-header">
+            <span>INFOGRAPHIC</span>
+            <span>FIG. 01</span>
+          </div>
+          <p class="meta-label" style="margin-bottom: 0.5rem;">CONTAINER ATTACK SURFACE</p>
+          <div class="diagram-box">
+┌─────────────────────────────────┐
+│  USER SPACE APPLICATION         │
+│  Node.js / Go / Distroless      │
+├─────────────────────────────────┤
+│  ▲ System Call Interface (libc) │
+├─────────────────────────────────┤
+│  SECCOMP-BPF FILTER             │
+│  [Allowlist: read, write, exit] │
+│  [Block: ptrace, execveat...]   │
+├─────────────────────────────────┤
+│  APPARMOR LSM POLICY            │
+│  [Deny /etc/shadow, deny caps]  │
+├─────────────────────────────────┤
+│  LINUX KERNEL CORE              │
+│  Namespaces &amp; Cgroups           │
+└─────────────────────────────────┘</div>
+          <p class="article-desc" style="font-size: var(--text-xs); margin-top: 0.75rem;">
+            Rappresentazione del modello a cipolla difensivo: anche se il runtime applicativo è compromesso, i filtri Seccomp e il modulo LSM (AppArmor) impediscono l'escalation dei privilegi nel kernel.
+          </p>
+        </div>
+
+        <!-- Info Card: Current Dispatch / Status -->
+        <div class="info-box">
+          <div class="info-box-header">
+            <span>METADATA</span>
+            <span>DISPATCH</span>
+          </div>
+          <ul class="meta-list">
+            <li>
+              <span class="label">LOCATION</span>
+              <span class="val">Cuneo (CN), Italy</span>
+            </li>
+            <li>
+              <span class="label">CURRENT FOCUS</span>
+              <span class="val">Node.js · Linux Hardening</span>
+            </li>
+            <li>
+              <span class="label">PRIMARY STACK</span>
+              <span class="val">Node / Go / Linux / TS</span>
+            </li>
+            <li>
+              <span class="label">UPCOMING TALK</span>
+              <span class="val">AWS UG Cuneo (Prep)</span>
+            </li>
+            <li>
+              <span class="label">STATUS</span>
+              <span class="val">Available for talks</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Margin Note / Editorial Quote -->
+        <div class="margin-note">
+          <strong>Punto di Vista</strong>
+          I security talk sono spesso tenuti da specialisti di sicurezza per altri specialisti. Il mio obiettivo è portare questi strumenti nelle mani di chi scrive il codice applicativo ogni giorno.
+        </div>
+
+        <!-- Direct Contact Box -->
+        <div class="info-box">
+          <div class="info-box-header">
+            <span>NETWORK</span>
+            <span>CONNECT</span>
+          </div>
+          <ul class="meta-list">
+            <li>
+              <span class="label">GITHUB</span>
+              <span class="val"><a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">@gafreax</a></span>
+            </li>
+            <li>
+              <span class="label">LINKEDIN</span>
+              <span class="val"><a href="https://www.linkedin.com/in/gabrielefontana/" target="_blank" rel="noopener noreferrer">gabrielefontana</a></span>
+            </li>
+            <li>
+              <span class="label">EMAIL</span>
+              <span class="val"><a href="mailto:gafreax@gmail.com">gafreax@gmail.com</a></span>
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          &copy; 2026 GABRIELE FONTANA — MINIMAL EDITORIAL PORTFOLIO &amp; NOTES.
+        </div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/gabrielefontana/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="mailto:gafreax@gmail.com">Email</a></li>
+          <li><a href="#talks">Talks</a></li>
+          <li><a href="#writing">Writing</a></li>
+        </ul>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="main.js"></script>
+</body>
 </html>
