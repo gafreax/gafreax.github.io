@@ -499,9 +499,12 @@ a:hover {
 
 /* ASCII / Diagram Box */
 .diagram-box {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  line-height: 1.45;
+  font-family: "Fira Code", "Space Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  letter-spacing: 0;
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
   background-color: var(--code-bg);
   border: 1px solid var(--border);
   padding: var(--space-4);
