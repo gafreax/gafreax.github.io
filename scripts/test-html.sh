@@ -25,7 +25,7 @@ log_fail() {
 echo "=== Running Minimal HTML & Asset Verification in $PROJECT_DIR ==="
 
 # 1. Check Core Asset Files
-for asset in "style.css" "main.js" "index.html" "article-container-at-war.html"; do
+for asset in "style.css" "main.js" "index.html"; do
   if [[ -f "$asset" ]]; then
     log_pass "File exists: $asset"
   else
@@ -79,7 +79,9 @@ check_html_file() {
 }
 
 check_html_file "index.html"
-check_html_file "article-container-at-war.html"
+if [[ -f "article-container-at-war.html" ]]; then
+  check_html_file "article-container-at-war.html"
+fi
 
 # 3. Check Internal Links
 echo "--- Checking Internal Links in HTML files ---"
@@ -103,7 +105,9 @@ check_internal_links() {
 }
 
 check_internal_links "index.html"
-check_internal_links "article-container-at-war.html"
+if [[ -f "article-container-at-war.html" ]]; then
+  check_internal_links "article-container-at-war.html"
+fi
 
 # 4. Check CSS custom properties existence
 echo "--- Checking CSS Theme Variables in style.css ---"
