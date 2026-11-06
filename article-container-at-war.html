@@ -3,9 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Container at War: Behind the Scenes of the Live Demos &amp; Hardening — Gabriele Fontana</title>
-  <meta name="description" content="Distroless is not enough. The technical debrief of the keynote talk at Come To Code 2026: runtime exploit mechanics, AppArmor, Seccomp, and practical defense." />
+  <title>Container at War: Beyond the Distroless Myth — Gabriele Fontana</title>
+  <meta name="description" content="More secure does not mean secure. Full technical debrief of the Come To Code 2026 talk: in-memory LFI, Kubernetes token exfiltration, Go fileless execution via memfd_create, AppArmor allowlists, Seccomp-BPF, and live GKE verification." />
   <meta name="author" content="Gabriele Fontana" />
+  <link rel="canonical" href="https://gafreax.github.io/article-container-at-war.html" />
+
+  <!-- Open Graph & Social Meta -->
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="Gabriele Fontana" />
+  <meta property="og:title" content="Container at War: Beyond the Distroless Myth — Gabriele Fontana" />
+  <meta property="og:description" content="More secure does not mean secure. Full technical debrief of the Come To Code 2026 talk: in-memory LFI, Kubernetes token exfiltration, Go fileless execution via memfd_create, AppArmor allowlists, Seccomp-BPF, and live GKE verification." />
+  <meta property="og:url" content="https://gafreax.github.io/article-container-at-war.html" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Container at War: Beyond the Distroless Myth — Gabriele Fontana" />
+  <meta name="twitter:description" content="More secure does not mean secure. Full technical debrief of the Come To Code 2026 talk: in-memory LFI, Kubernetes token exfiltration, Go fileless execution via memfd_create, AppArmor allowlists, Seccomp-BPF, and live GKE verification." />
+
+  <!-- Minimal Editorial Monogram Favicon (Editorial Sage Green #4E6E5D) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23F9F8F5' stroke='%234E6E5D' stroke-width='4'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia, serif' font-weight='700' font-size='28' fill='%234E6E5D'%3EGF%3C/text%3E%3C/svg%3E" />
 
   <!-- Google Fonts: Fraunces, Inter, Space Mono, Fira Code -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,11 +35,12 @@
     <header class="site-header">
       <div class="header-inner">
         <a href="index.html" class="site-logo">
-          <strong>GF</strong> <span>/ GABRIELE FONTANA</span>
+          <strong class="logo-mark">GF</strong> <span class="logo-slash">/</span> <span>GABRIELE FONTANA</span>
         </a>
 
         <nav class="site-nav" aria-label="Main Navigation">
           <a href="index.html#talks">&larr; Back to Talks</a>
+          <a href="index.html#writings">Writings</a>
           <a href="index.html#software">Software</a>
           <a href="index.html#contributions">Contributions</a>
           <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
@@ -44,10 +59,10 @@
         <header class="article-header">
           <p class="meta-label">KEYNOTE DISPATCH · COME TO CODE 2026 · PIGNOLA, ITALY</p>
           <h1 class="headline-huge" style="margin: 0.75rem 0 1.5rem;">
-            Container at War: Why «Distroless» is Not Enough and How to Defend Your Workloads
+            Container at War: Beyond the «Distroless» Myth
           </h1>
           <p class="lede">
-            A minimal container image strips away the shell and standard utilities. But when an application has an execution flaw, the runtime interpreter itself becomes the weapon.
+            «More secure» does not mean «secure.» Stripping away <code>/bin/sh</code> and package managers shrinks your installation surface, not your execution surface. When your application has a bug, the runtime interpreter itself is the weapon.
           </p>
         </header>
 
@@ -55,53 +70,333 @@
 
         <div class="prose">
 
-          <h2>1. The False Sense of Security in Minimal Images</h2>
           <p>
-            In recent years, cloud-native best practices have settled on a standard recommendation: <em>«Use Distroless or minimal Alpine bases, remove <code>/bin/sh</code>, delete <code>curl</code> and <code>wget</code>, and you are protected.»</em>
+            Let me get one thing out of the way first: I work in security at <a href="https://redcarbon.ai" target="_blank" rel="noopener noreferrer">RedCarbon</a>, but at heart I am still a software developer. I write JavaScript, TypeScript, Go, and occasionally Python—which mostly means I know how to introduce bugs in four different ecosystems.
           </p>
           <p>
-            While minimal images provide clean hygiene and reduce common vulnerability scanners' noise, they address <strong>installation surface</strong> rather than <strong>execution surface</strong>. When an application written in Node.js or Go suffers from a Local File Inclusion (LFI) flaw or an arbitrary memory execution path, an attacker does not need an external bash binary. They can operate straight within the process space:
-          </p>
-
-          <pre><code>// Reading sensitive files in memory, even inside a shell-less container
-const fs = require('fs');
-const token = fs.readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token', 'utf8');
-process.stdout.write(token);</code></pre>
-
-          <h2>2. The Live Arena at Come To Code 2026</h2>
-          <p>
-            During the keynote at Come To Code 2026, we demonstrated this reality across two parallel environments: a local Docker daemon and a real Google Kubernetes Engine (GKE) cluster.
+            Every time container security comes up in an architecture review, the same comforting mantras surface within five minutes: <em>«We use Distroless images, there is no shell inside»</em>, <em>«We run on a managed GKE cluster»</em>, or <em>«We enabled the default Seccomp profile.»</em> The fastest way to get hurt in security is to say: <em>«I used tool X, so I'm done.»</em> The moment we think like that, we have stopped reasoning.
           </p>
           <p>
-            In the unhardened round, an LFI vulnerability allowed the attacker to reach the mounted Kubernetes service account token, inspect network interfaces, and invoke arbitrary system calls.
-          </p>
-          <p>
-            In the second round, kernel security controls were activated: <strong>AppArmor LSM</strong> to enforce strict path confinement and deny sensitive file access, and <strong>Seccomp-BPF</strong> filters to restrict allowed syscalls to an application-specific allowlist.
+            At <strong>Come To Code 2026</strong> in Pignola, right after my friend <strong>Davide Imola</strong> showed how to catch vulnerabilities in source code with <strong>Argus</strong>, I took the stage to show the opposite side of the coin: what happens when a bug slips through into production. I stepped outside my pure-developer comfort zone—into the world of kernel LSMs, syscall filters, and DevOps headaches at 2 AM reading <code>apparmor_parser</code> man pages—and pitted five containers against live attacks on Docker and Google Kubernetes Engine (GKE).
           </p>
 
           <blockquote>
-            «An attacker cannot execute what the kernel categorically refuses to dispatch.»
+            «The weakest link in a security chain defines the security of the entire system.» Doesn't matter how thick the other links are—what matters is where the chain snaps.
           </blockquote>
 
-          <h2>3. Practical Hardening: Bridging Applications and Infrastructure</h2>
+          <h2>0. The Arena: 5 Containers, Only 3 Images</h2>
           <p>
-            Security is a chain, and the weakest link determines the outcome. As my colleague <strong>Matteo Madeddu</strong> highlighted in his reference on <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">Docker security and Linux capabilities</a>, container defense requires host-level awareness and disciplined profile management.
-          </p>
-          <p>
-            Key takeaways for production container defense:
+            Before firing a single request, let us look at the architecture of the lab (<a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">github.com/gafreax/container-at-war</a>). There are <strong>five running services</strong> on ports <code>6661</code> through <code>6665</code>, but the build pipeline produces only <strong>three container images</strong>:
           </p>
           <ul>
-            <li><strong>Automated Syscall Profiling</strong>: Using tools like our <code>skill-seccomp-apparmor-profiler</code> to trace legitimate process execution in staging environments, drafting allowlists with deterministic verification.</li>
-            <li><strong>Least Privilege by Default</strong>: Dropping all unnecessary Linux capabilities (<code>--cap-drop=ALL</code>) and strictly forbidding privilege escalation (<code>allowPrivilegeEscalation: false</code>).</li>
-            <li><strong>Host and Node Baseline</strong>: Ensuring nodes (whether EC2, Bottlerocket, or GKE) enforce CIS benchmarks and enforce IMDSv2 to prevent cloud credential exfiltration.</li>
+            <li><strong>Image 1 — Classic Node (1.16 GB)</strong>: Standard full Debian-based Node.js image with <code>/bin/sh</code>, coreutils, package managers, running as <code>root</code> (<code>app-classic</code> on port <code>6661</code>).</li>
+            <li><strong>Image 2 — Distroless Node (162 MB)</strong>: Built via multi-stage Dockerfile on top of <code>gcr.io/distroless/nodejs22-debian12</code>. No shell, no <code>curl</code>, no <code>ls</code>, no package manager. This <em>single image</em> powers both <code>app-distroless</code> (port <code>6662</code>) and <code>app-distroless-hardened</code> (port <code>6663</code>).</li>
+            <li><strong>Image 3 — Distroless Static Go (8.22 MB)</strong>: A static Go binary (<code>CGO_ENABLED=0</code>) inside <code>gcr.io/distroless/static-debian12</code>. Literally nothing in the filesystem except the binary itself. This <em>single image</em> powers both <code>app-go-distroless</code> (port <code>6664</code>) and <code>app-go-distroless-hardened</code> (port <code>6665</code>).</li>
           </ul>
-
-          <h2>4. Slides &amp; Code</h2>
           <p>
-            The full slide deck, vulnerable demo targets, and automated setup scripts are open source and available on GitHub:
+            Why three images for five services? Because <strong>container hardening is a runtime property, not an image property</strong>. A container does not have its own kernel; it shares the host node's Linux kernel. Linux Security Modules (AppArmor) and syscall filters (Seccomp-BPF) do not live inside your Dockerfile—they are enforced by the host kernel via <code>security_opt</code> in Docker Compose or <code>securityContext</code> in Kubernetes.
+          </p>
+
+          <h2>Act I — The False Victory: Command Injection vs. Distroless</h2>
+          <p>
+            We start with a classic flaw in our Fastify application: unsanitized user input passed straight to <code>child_process.exec()</code>:
+          </p>
+
+          <pre><code>// 1. Classic Command Injection (via exec -> requires /bin/sh)
+fastify.get('/attack/command-injection', (request, reply) => {
+    const ip = request.query.ip || '8.8.8.8';
+    exec(`ping -c 1 ${ip}`, (error, stdout, stderr) => {
+        if (error) {
+            return reply.code(500).send(`[FAILED] ${error.message}\n`);
+        }
+        return reply.send(stdout);
+    });
+});</code></pre>
+
+          <p>
+            Against <code>app-classic</code> (port <code>6661</code>), passing <code>?ip=8.8.8.8;id</code> executes immediately as <code>uid=0(root)</code>. When we fire the exact same payload at <code>app-distroless</code> (port <code>6662</code>), the attack dies with HTTP 500:
+          </p>
+
+          <pre><code>[FAILED] spawn /bin/sh ENOENT</code></pre>
+
+          <p>
+            Under the hood, Node's <code>child_process.exec()</code> does not invoke <code>ping</code> directly—it calls <code>/bin/sh -c "ping -c 1 ..."</code>. Because the distroless image never copied a shell into the rootfs during the multi-stage build, <code>execve("/bin/sh", ...)</code> returns <code>ENOENT</code> (<em>Error NO ENTry</em>).
           </p>
           <p>
-            &rarr; <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer"><strong>github.com/gafreax/container-at-war</strong></a>
+            <em>Distroless 1, Attacker 0. End of the talk?</em> Not quite. I cheated: I picked the one attack vector that explicitly depends on <code>/bin/sh</code>.
+          </p>
+
+          <h2>Act II — The Illusion Collapses: LFI, Kubernetes Tokens &amp; Shell-less RCE</h2>
+          <p>
+            What happens when the vulnerability does not ask the OS to spawn an external binary, but instead uses the legitimate APIs of the language runtime? Look at the next two endpoints in the exact same Distroless container:
+          </p>
+
+          <pre><code>// 2. LFI / Path Traversal (pure Node fs API -> no shell needed)
+fastify.get('/attack/path-traversal', async (request, reply) => {
+    try {
+        return reply.send(fs.readFileSync(request.query.file, 'utf8'));
+    } catch (err) {
+        return reply.code(500).send(`Read error: ${err.code || err.message}\n`);
+    }
+});
+
+// 3. True RCE (arbitrary JS execution via eval -> the interpreter IS the shell)
+fastify.get('/attack/eval-rce', (request, reply) => {
+    try {
+        const result = eval(request.query.code);
+        return reply.send(`RCE result: ${result}\n`);
+    } catch (err) {
+        return reply.code(500).send(`RCE error: ${err.message}\n`);
+    }
+});</code></pre>
+
+          <p>
+            When we hit <code>/attack/path-traversal</code> on <code>app-distroless</code>, the absence of <code>/bin/sh</code> or <code>cat</code> is completely irrelevant. Node's <code>fs.readFileSync()</code> issues an <code>openat(2)</code> and <code>read(2)</code> syscall directly from the Node process:
+          </p>
+          <ul>
+            <li>Requesting <code>?file=/etc/passwd</code> dumps the user database immediately (complete with our stage easter-egg user <code>darth_vader</code> running <code>/bin/force_choke</code>).</li>
+            <li>Requesting <code>?file=/var/run/secrets/come-to-code-supersecure-token</code> dumps our "supersecure" file—which turns out to be an ASCII-art banner where the word <em>"supersecure"</em> in the filename was the only security control.</li>
+            <li>Worse, in a Kubernetes pod, every container has a ServiceAccount credential mounted by default at a well-known path. Requesting <code>?file=/var/run/secrets/kubernetes.io/serviceaccount/token</code> exfiltrates the cluster JWT token cleanly. From there, an attacker does not care about your container anymore—they talk directly to the Kubernetes API server for lateral movement across the cluster.</li>
+          </ul>
+          <p>
+            And what about <code>/attack/eval-rce</code>? The obsession with removing <code>/bin/sh</code> assumes an attacker wants a POSIX shell. If your workload runs an interpreter (Node.js, Python, Ruby, PHP), <strong>the runtime interpreter is already a shell</strong>. Passing <code>require('fs').readFileSync('/var/run/secrets/kubernetes.io/serviceaccount/token','utf8')</code>—or opening a reverse TCP socket via Node's native <code>net</code> module—gives full Remote Code Execution without ever spawning a child process.
+          </p>
+          <p>
+            In terms of the <strong>4C model of Cloud Native Security</strong> (<em>Code &rarr; Container &rarr; Cluster &rarr; Cloud</em>), LFI and <code>eval</code> live in the innermost ring (<strong>Code</strong>), while Distroless only trims the second ring (<strong>Container</strong>). Shrinking the image from 1.16 GB to 162 MB reduced our <em>installation surface</em>, not our <em>execution surface</em>.
+          </p>
+
+          <h2>Act III — Kernel Boundaries: AppArmor &amp; the Blacklist Trap</h2>
+          <p>
+            If the application code is compromised and attempts to read sensitive paths like <code>/var/run/secrets/kubernetes.io/serviceaccount/token</code>, who has the authority to stop the <code>openat(2)</code> call? Only the Linux kernel on the host node.
+          </p>
+          <p>
+            On <code>app-distroless-hardened</code> (port <code>6663</code>), we run the <strong>exact same Distroless image</strong>, but we instruct the runtime to drop root, mount the root filesystem read-only, and attach an <strong>AppArmor LSM profile</strong>:
+          </p>
+
+          <pre><code># docker-compose.yml (app-distroless-hardened)
+read_only: true
+user: "1000"
+security_opt:
+  - apparmor=docker-node-hardened</code></pre>
+
+          <p>
+            First, a critical observation: neither <code>read_only: true</code> nor <code>user: "1000"</code> stops our LFI attack. Why? Because LFI is a <em>read</em> operation, and the Kubernetes ServiceAccount token has to be readable by the user running the Node process if the application ever talks to the cluster API.
+          </p>
+          <p>
+            What actually stops the token theft on port <code>6663</code> is our AppArmor profile loaded into the host kernel:
+          </p>
+
+          <pre><code>#include &lt;tunables/global&gt;
+
+profile docker-node-hardened flags=(attach_disconnected,mediate_deleted) {
+  #include &lt;abstractions/base&gt;
+  #include &lt;abstractions/nameservice&gt;
+
+  network,
+  file,
+
+  # Explicitly deny sensitive paths (Blacklist approach for stage demo)
+  deny /etc/passwd mrw,
+  deny /etc/shadow mrw,
+  deny /var/run/secrets/kubernetes.io/serviceaccount/** mrw,
+
+  deny mount,
+  deny ptrace,
+}</code></pre>
+
+          <p>
+            Now, when <code>app-distroless-hardened</code> tries to read <code>/etc/passwd</code> or the Kubernetes ServiceAccount token via <code>fs.readFileSync()</code>, the kernel intercepts the file access and returns <code>EACCES</code> (<em>Permission denied</em>). Both attacks turn green (🟢 Blocked).
+          </p>
+
+          <h3>The Hole in the Blacklist</h3>
+          <p>
+            Look closely at the AppArmor profile above: it uses a <strong>denylist (blacklist)</strong>—allowing <code>file,</code> globally and blocking specific paths with <code>deny</code>. On stage, we then fire a third LFI request against the hardened container:
+          </p>
+
+          <pre><code>curl "http://localhost:6663/attack/path-traversal?file=/etc/come-to-code.conf"</code></pre>
+
+          <p>
+            And out comes the secret configuration file (🔴 Succeeded). Why? Because whoever wrote the denylist remembered <code>/etc/passwd</code> and <code>/var/run/secrets/kubernetes.io/serviceaccount/**</code>, but forgot that a custom <code>/etc/come-to-code.conf</code> was mounted into the container.
+          </p>
+          <p>
+            A denylist only protects what you remember to forbid. The defender has to remember <em>everything</em>; the attacker only has to find <em>one</em> path you forgot. In production, AppArmor profiles must be built as <strong>default-deny allowlists</strong>: deny all file access by default, and explicitly allow only the application bundle (e.g., <code>/app/** r,</code>), runtime libraries, and required pseudo-filesystems.
+          </p>
+
+          <h2>Act IV — Phase Shift: Fileless Execution in Go (<code>memfd_create</code>) &amp; Seccomp-BPF</h2>
+          <p>
+            At this point someone always asks: <em>«Okay, Node.js has an interpreter and needs lots of files. What if I compile a static Go binary with <code>CGO_ENABLED=0</code> and put it in <code>distroless/static</code>? It's 8 megabytes, no libc, no shell, no interpreter, read-only filesystem, and AppArmor locked down!»</em>
+          </p>
+          <p>
+            Enter <code>app-go-distroless</code> (port <code>6664</code>). Here we shift our threat model from initial access to <strong>post-exploitation and defense evasion</strong>—specifically <strong>MITRE ATT&amp;CK T1620 (Reflective Code Loading)</strong>. Suppose an attacker achieves code execution inside a compiled service (for instance via a compromised supply-chain dependency—think <code>xz</code> / CVE-2024-3094—or a memory corruption / deserialization flaw) and wants to drop and execute a second-stage ELF binary.
+          </p>
+          <p>
+            Writing to disk fails because <code>readOnlyRootFilesystem: true</code> is enabled, and AppArmor watches every path on the filesystem. So the attacker does not touch the disk at all. They invoke the Linux syscall <code>memfd_create(2)</code>:
+          </p>
+
+          <pre><code>func filelessHandler(w http.ResponseWriter, r *http.Request) {
+	// Creates an anonymous file that lives strictly in RAM
+	fd, err := unix.MemfdCreate("demo-in-ram", unix.MFD_CLOEXEC)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "[BLOCKED] memfd_create denied: %v\n", err)
+		return
+	}
+	defer unix.Close(fd)
+
+	// Write payload into the in-RAM file descriptor
+	_, _ = unix.Write(fd, []byte("hello from RAM\n"))
+
+	// Accessible via /proc/self/fd/N -> a real attacker calls execve() on this path
+	memPath := fmt.Sprintf("/proc/self/fd/%d", fd)
+	fmt.Fprintf(w, "[SUCCEEDED] fileless primitive available: in-RAM fd %d at %s\n", fd, memPath)
+}</code></pre>
+
+          <p>
+            On <code>app-go-distroless</code>, this succeeds immediately:
+          </p>
+          <ul>
+            <li><strong>Distroless static image?</strong> Useless—<code>memfd_create</code> is a kernel syscall (#319 on x86_64), not a binary on disk.</li>
+            <li><strong>Read-only root filesystem?</strong> Useless—nothing is written to disk; the anonymous file resides in RAM.</li>
+            <li><strong>AppArmor?</strong> Blind to the creation of the anonymous file descriptor, because AppArmor mediates <em>file paths</em>, not raw syscalls.</li>
+          </ul>
+          <p>
+            To stop a syscall primitive, you must defend at the <strong>syscall layer</strong> with <strong>Seccomp-BPF</strong>. In <code>app-go-distroless-hardened</code> (port <code>6665</code>), we attach a Seccomp profile that intercepts <code>memfd_create</code> and <code>memfd_secret</code> at the kernel boundary and returns <code>EPERM</code> (<code>errnoRet: 1</code>):
+          </p>
+
+          <pre><code>{
+  "defaultAction": "SCMP_ACT_ALLOW",
+  "architectures": ["SCMP_ARCH_X86_64", "SCMP_ARCH_AARCH64"],
+  "syscalls": [
+    {
+      "names": ["memfd_create", "memfd_secret"],
+      "action": "SCMP_ACT_ERRNO",
+      "errnoRet": 1,
+      "comment": "Deny the fileless in-RAM execution primitive"
+    }
+  ]
+}</code></pre>
+
+          <p>
+            When we hit port <code>6665</code>, the kernel refuses to dispatch the syscall and the handler returns <code>[BLOCKED] memfd_create denied: operation not permitted</code> (🟢).
+          </p>
+          <p>
+            <strong>A classic trap to avoid:</strong> when people first write a Seccomp profile against fileless execution, they are tempted to block <code>execve</code>. <strong>Never block <code>execve</code> in your container's initial Seccomp profile</strong>—the container runtime (<code>runc</code> / <code>crun</code>) needs <code>execve</code> to launch your entrypoint process in the first place! Blocking it prevents the container from ever starting (<code>exec ...: operation not permitted</code>). And just like AppArmor, while a small denylist is great for teaching on stage, production Seccomp profiles should use a <strong>default-deny allowlist</strong> (<code>"defaultAction": "SCMP_ACT_ERRNO"</code>) allowing only the exact syscalls your binary needs.
+          </p>
+
+          <h2>The «Managed Kubernetes» Myth: Live Verification on GKE</h2>
+          <p>
+            What if you deploy that exact Go service to a managed Kubernetes cluster like <strong>Google Kubernetes Engine (GKE)</strong> and enable Kubernetes' built-in default Seccomp profile (<code>securityContext.seccompProfile.type: RuntimeDefault</code>)?
+          </p>
+          <p>
+            We tested this live against a real GKE 1.35 cluster. The result surprises many engineers: <strong>with <code>RuntimeDefault</code> enabled, <code>/attack/fileless-rce</code> still returns <code>HTTP 200 [SUCCEEDED]</code></strong>. Why? Because containerd's <code>RuntimeDefault</code> profile is designed for broad compatibility across arbitrary workloads, and <code>memfd_create</code> is permitted by default!
+          </p>
+          <p>
+            The lesson is brutal: <strong>«I have Seccomp enabled» does not mean «I have Seccomp protecting me against this threat.»</strong> To block <code>memfd_create</code> on Kubernetes, you need a custom <code>Localhost</code> Seccomp profile deployed to your nodes—or a stronger isolation boundary like <strong>GKE Sandbox (gVisor)</strong>, which intercepts syscalls in a user-space sentry kernel. Managed Kubernetes operates on a shared responsibility model: the cloud provider patches the control plane and node OS, but they do not write your application code or your workload-specific syscall allowlists.
+          </p>
+
+          <h2>Act V — The Final Scoreboard &amp; Why Shift-Left Is Non-Negotiable</h2>
+          <p>
+            Let us look at the complete scoreboard across all five containers at the end of the live demo:
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Service (Port)</th>
+                <th>Cmd Injection</th>
+                <th>LFI /etc/passwd</th>
+                <th>LFI K8s Token</th>
+                <th>LFI .conf (Hole)</th>
+                <th>JS eval() RCE</th>
+                <th>Go memfd_create</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>app-classic</code> (:6661)</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>app-distroless</code> (:6662)</td>
+                <td>🟢 ENOENT</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>🔴 Pwned</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>app-distroless-hardened</code> (:6663)</td>
+                <td>🟢 ENOENT</td>
+                <td>🟢 EACCES</td>
+                <td>🟢 EACCES</td>
+                <td>🔴 Bypass</td>
+                <td>🔴 Pwned</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td><code>app-go-distroless</code> (:6664)</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>🔴 RAM FD OK</td>
+              </tr>
+              <tr>
+                <td><code>app-go-distroless-hardened</code> (:6665)</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>🟢 EPERM</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Notice that column five—<strong><code>eval()</code> RCE</strong>—stays red (🔴) across every single runtime configuration.
+          </p>
+          <p>
+            Why didn't Distroless, non-root, read-only rootfs, AppArmor, or Seccomp stop <code>eval()</code>? Because <code>eval()</code> executes inside the legitimate interpreter process and uses the exact same syscalls (<code>read</code>, <code>write</code>, <code>openat</code>) and application files that your business logic needs to function. If you blocked those syscalls or files in the kernel, your application wouldn't run at all.
+          </p>
+          <p>
+            <strong>A bug in the Code ring can only be fixed in the Code ring.</strong> Runtime hardening contains the blast radius (stopping the attacker from reading <code>/var/run/secrets/...</code> or calling <code>memfd_create</code> after they get in), but eliminating <code>eval()</code>, path traversal, and hardcoded secrets requires <strong>Shift-Left security</strong> before the image is ever built:
+          </p>
+          <ul>
+            <li><strong>Deterministic Static Analysis &amp; Scanners</strong>: Integrating <strong>Semgrep</strong>, <strong>CodeQL</strong>, <strong>gosec</strong>, <strong>Bandit</strong>, <strong>Gitleaks</strong>, and <strong>OSV-Scanner</strong> into CI/CD pipelines.</li>
+            <li><strong>AI-Assisted Security Review with Human-in-the-Loop</strong>: Years ago, writing an AppArmor or Seccomp profile meant spending hours in kernel documentation—or copying a 2013 Stack Overflow answer with three upvotes and praying your pod would still boot. Today, AI can draft a profile from observed behavior (<a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer"><code>skill-seccomp-apparmor-profiler</code></a>) and orchestrate code triage (like <strong>Argus</strong>, presented by <strong>Davide Imola</strong>). But a broken security profile stated with LLM confidence is <em>worse</em> than having no profile at all: it gives you a false sense of security. If «more secure» does not mean «secure», <strong>«more automated» does not mean «correct»</strong> without human verification and mandatory negative tests.</li>
+            <li><strong>Host &amp; Capabilities Hygiene</strong>: As my colleague <strong>Matteo Madeddu</strong> thoroughly documented in his guide on <a href="https://madeddu.xyz/posts/docker-security" target="_blank" rel="noopener noreferrer">Docker security and Linux capabilities</a>, always pair LSM/Seccomp profiles with <code>--cap-drop=ALL</code> and <code>allowPrivilegeEscalation: false</code>.</li>
+          </ul>
+
+          <p>
+            Distroless is one link in the chain. AppArmor is one link. Seccomp is one link. Managed Kubernetes is one link. None of them, alone, is «security.» The next time you read <em>«secure by default»</em> on a slide or a vendor page, ask yourself one question: <strong>«Secure against what?»</strong>
+          </p>
+          <p>
+            <em>(And no, I don't spend all my weekends writing AppArmor rules—when I just want to enjoy the terminal as a developer, I build small CLI tools like <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova</a>. No penguins were harmed in the making of this research. Many AI agents were.)</em>
+          </p>
+
+          <h2>Reproduce the Arena Yourself</h2>
+          <p>
+            Every container, Dockerfile, Kubernetes manifest, AppArmor profile, Seccomp filter, and automated attack script from the keynote is open source. Clone the repository, load the kernel profiles, and break the containers on your own machine:
+          </p>
+
+          <pre><code>git clone https://github.com/gafreax/container-at-war.git
+cd container-at-war/public
+sudo apparmor_parser -r -W k8s/security/apparmor-node-profile
+docker compose up -d --build
+./tests/test-node.sh
+./tests/test-go.sh</code></pre>
+
+          <p>
+            &rarr; <strong>Repository &amp; Slide Deck:</strong> <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">github.com/gafreax/container-at-war</a><br />
+            &rarr; <strong>AI Security Profiler Skill:</strong> <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">github.com/gafreax/skill-seccomp-apparmor-profiler</a>
           </p>
         </div>
 
@@ -131,33 +426,51 @@ process.stdout.write(token);</code></pre>
             </li>
             <li>
               <span class="label">READING TIME</span>
-              <span class="val">8 min</span>
+              <span class="val">10 min</span>
             </li>
             <li>
-              <span class="label">TOPICS</span>
-              <span class="val">Seccomp · AppArmor</span>
+              <span class="label">STACK</span>
+              <span class="val">Node · Go · K8s</span>
+            </li>
+            <li>
+              <span class="label">KERNEL</span>
+              <span class="val">AppArmor · Seccomp</span>
             </li>
           </ul>
         </div>
 
-        <!-- Infographic: Attack vs Defense -->
+        <!-- Infographic: Each Layer Stops One Thing -->
         <div class="info-box">
           <div class="info-box-header">
-            <span>COMPARISON</span>
-            <span>DEFENSE</span>
+            <span>DEFENSE IN DEPTH</span>
+            <span>LAYERS</span>
           </div>
-          <div class="diagram-box">+------------------------------------+
-| [WITHOUT HARDENING]                |
-| Payload -> LFI -> Read SA Token    |
-| Payload -> MemExec -> Shellcode OK |
-+------------------------------------+
-| [WITH SECCOMP + APPARMOR]          |
-| Payload -> LFI -> EPERM (AppArmor) |
-| Payload -> MemExec -> SIGSYS (Kill)|
-+------------------------------------+</div>
+          <div class="diagram-box">+--------------------------------------+
+| 1. DISTROLESS IMAGE                  |
+| Stops: /bin/sh cmdi -> ENOENT        |
+| Misses: LFI, K8s Token, eval, memfd  |
++--------------------------------------+
+| 2. APPARMOR (LSM FILE MEDIATION)     |
+| Stops: LFI on /etc/passwd & SA token |
+| Misses: Blacklist holes, syscalls    |
++--------------------------------------+
+| 3. SECCOMP-BPF (SYSCALL FILTERING)   |
+| Stops: Fileless memfd_create (EPERM) |
+| Misses: Pure app-level eval() RCE    |
++--------------------------------------+
+| 4. SHIFT-LEFT (STATIC + AI REVIEW)   |
+| Fixes: eval(), LFI & secrets in code |
++--------------------------------------+</div>
           <p class="article-desc" style="font-size: var(--text-xs); margin-top: 0.75rem;">
-            Kernel filters intercept and terminate illicit syscalls before user-space code completes the operation.
+            AppArmor mediates files; Seccomp mediates syscalls; Shift-Left fixes code. Applying the right control at the wrong layer stops nothing.
           </p>
+        </div>
+
+        <!-- Key Maxim Box -->
+        <div class="margin-note">
+          <strong>Core Engineering Theses</strong>
+          1. <em>«More secure» does not mean «secure.»</em><br />
+          2. <em>«More automated» does not mean «correct.»</em>
         </div>
 
         <!-- Recommended Reading Margin Note -->

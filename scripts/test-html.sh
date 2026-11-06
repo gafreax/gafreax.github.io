@@ -107,7 +107,7 @@ check_internal_links "article-container-at-war.html"
 
 # 4. Check CSS custom properties existence
 echo "--- Checking CSS Theme Variables in style.css ---"
-for var in "--bg:" "--text-primary:" "--font-display:" "--font-mono:" '[data-theme="dark"]'; do
+for var in "--bg:" "--text-primary:" "--accent:" "--accent-subtle:" "--font-display:" "--font-mono:" '[data-theme="dark"]'; do
   if grep -qF -e "$var" "style.css"; then
     log_pass "style.css defines: $var"
   else

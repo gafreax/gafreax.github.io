@@ -6,6 +6,20 @@
   <title>Gabriele Fontana — Senior Software Engineer</title>
   <meta name="description" content="Senior Software Engineer at RedCarbon with 20 years of experience designing solid, secure software architectures." />
   <meta name="author" content="Gabriele Fontana" />
+  <link rel="canonical" href="https://gafreax.github.io/" />
+
+  <!-- Open Graph & Social Meta -->
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Gabriele Fontana" />
+  <meta property="og:title" content="Gabriele Fontana — Senior Software Engineer" />
+  <meta property="og:description" content="Senior Software Engineer at RedCarbon with 20 years of experience designing solid, secure software architectures." />
+  <meta property="og:url" content="https://gafreax.github.io/" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Gabriele Fontana — Senior Software Engineer" />
+  <meta name="twitter:description" content="Senior Software Engineer at RedCarbon with 20 years of experience designing solid, secure software architectures." />
+
+  <!-- Minimal Editorial Monogram Favicon (Editorial Sage Green #4E6E5D) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='8' fill='%23F9F8F5' stroke='%234E6E5D' stroke-width='4'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-family='Georgia, serif' font-weight='700' font-size='28' fill='%234E6E5D'%3EGF%3C/text%3E%3C/svg%3E" />
 
   <!-- Google Fonts: Fraunces (Wide, open, editorial serif), Inter (Body), Space Mono & Fira Code (Mono) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -21,14 +35,15 @@
     <header class="site-header">
       <div class="header-inner">
         <a href="index.html" class="site-logo">
-          <strong>GF</strong> <span>/ GABRIELE FONTANA</span>
+          <strong class="logo-mark">GF</strong> <span class="logo-slash">/</span> <span>GABRIELE FONTANA</span>
         </a>
 
         <nav class="site-nav" aria-label="Main Navigation">
           <a href="#talks">Talks</a>
-          <a href="#software">Software &amp; Skills</a>
+          <a href="#writings">Writings</a>
+          <a href="#software">Software</a>
           <a href="#contributions">Contributions</a>
-          <a href="#community">Community</a>
+          <a href="#communities">Communities</a>
           <button id="theme-toggle" class="theme-toggle-btn" type="button" aria-label="Toggle theme">
             <span>☽</span> DARK
           </button>
@@ -52,7 +67,7 @@
           </p>
 
           <p class="bio-summary">
-            Senior Software Engineer at <strong>RedCarbon</strong> with twenty years of experience designing solid, secure architectures. My roots go back to early-2000s Linux User Groups (LUGs), forging a lasting bond with Open Source. Working across the full software ecosystem—from frontend and backend to databases—with a Linux-rooted DNA, I specialize in architectural standards and <em>Secure by Design</em> practices. A believer in Servant Leadership, I strive to make complex systems simple by supporting and guiding others, and I actively participate in local communities (PUG Torino, Go Meetup, Open Source Saturday). Away from the console, I live for sports and the mountains—complete with the occasional Fantozzi-style injury—and food and wine, with the (often doomed) ambition of replicating at home the dishes discovered among local hills and cellars.
+          Senior Software Engineer at <strong><a href="https://redcarbon.ai">RedCarbon</a></strong> with twenty years of experience designing solid, secure architectures. My roots go back to early-2000s Linux User Groups (LUGs), forging a lasting bond with Open Source. Working across the full software ecosystem—from frontend and backend to databases—with a Linux-rooted DNA, I specialize in architectural standards and <em>Secure by Design</em> practices. A believer in Servant Leadership, I strive to make complex systems simple by supporting and guiding others, and I actively participate in local communities (PUG Torino, Go Meetup, Open Source Saturday). Away from the console, I live for sports and the mountains—complete with the occasional Fantozzi-style injury—and food and wine, with the (often doomed) ambition of replicating at home the dishes discovered among local hills and cellars.
           </p>
         </section>
 
@@ -60,7 +75,7 @@
         <section id="talks" class="content-section">
           <div class="section-header">
             <h2>Past Talks</h2>
-            <span class="meta-label">01 // TALKS</span>
+            <span class="meta-label"><span class="accent-num">01 //</span> TALKS</span>
           </div>
 
           <article class="article-entry">
@@ -72,7 +87,7 @@
               Live attacks against Node.js and Go containers on Docker and Google Kubernetes Engine (GKE). Demonstrating that stripping the shell is not enough when application vulnerabilities exist, and showing how AppArmor LSM profiles, Seccomp-BPF filters, and shift-left security change the outcome.
             </p>
             <div class="article-links">
-              <a href="article-container-at-war.html" class="badge">Read Article &rarr;</a>
+              <a href="article-container-at-war.html" class="badge badge-accent">Read Article &rarr;</a>
               <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">Slides &amp; Demo Repo &nearr;</a>
               <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">Profiler Skill &nearr;</a>
             </div>
@@ -98,7 +113,7 @@
             <h3 class="article-entry-title">
               Community &amp; School Sessions
             </h3>
-            <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary); font-size: var(--text-base); line-height: 1.7;">
+            <ul style="margin: 0.5rem 0 0 1.5rem; color: var(--text-secondary); font-size: var(--text-base); line-height: 1.8;">
               <li><strong>Exploiting</strong> — <em>ITIS Vallauri, Fossano (2010)</em>: Introduction to software vulnerabilities and exploitation techniques.</li>
               <li><strong>PHP Application Development</strong> — <em>Linux Day Cuneo (2009)</em>: Building web applications with PHP and open-source tools.</li>
               <li><strong>KDE Application Development</strong> — <em>Linux Day Cuneo (2005)</em>: Developing desktop applications for the KDE environment on Linux.</li>
@@ -106,38 +121,97 @@
           </article>
         </section>
 
-        <!-- SOFTWARE & PUBLISHED SKILLS SECTION -->
+        <!-- 02 // WRITINGS SECTION -->
+        <section id="writings" class="content-section">
+          <div class="section-header">
+            <h2>Writings &amp; Dispatches</h2>
+            <span class="meta-label"><span class="accent-num">02 //</span> WRITINGS</span>
+          </div>
+
+          <div class="writings-card">
+            <div class="meta-label">TECHNICAL DISPATCH · CLOUD-NATIVE RUNTIME SECURITY · 8 MIN READ</div>
+            <h3 class="article-entry-title">
+              <a href="article-container-at-war.html">Container at War: Distroless is Not Enough</a>
+            </h3>
+            <p class="article-subtitle">Runtime exploit mechanics, Linux LSM boundary enforcement, and defense-in-depth</p>
+            <p class="article-desc">
+              Stripping away <code>/bin/sh</code>, <code>curl</code>, and package managers shrinks container attack surface, but it cannot prevent exploitation when application vulnerabilities exist. When an interpreter or compiled binary processes untrusted input, an attacker operates directly inside the process memory space. This dispatch explores how Linux Kernel Security Modules—specifically <strong>AppArmor LSM</strong> and <strong>Seccomp-BPF</strong> syscall filters—confine malicious execution even when an application is fully compromised.
+            </p>
+            <div class="topic-pills">
+              <span class="topic-pill">Linux Kernel LSM</span>
+              <span class="topic-pill">AppArmor</span>
+              <span class="topic-pill">Seccomp-BPF</span>
+              <span class="topic-pill">Memory Exploits</span>
+            </div>
+            <div class="article-links">
+              <a href="article-container-at-war.html" class="badge badge-accent">Read Full Article &rarr;</a>
+              <a href="https://github.com/gafreax/container-at-war" target="_blank" rel="noopener noreferrer">Attack Demos &amp; Slides &nearr;</a>
+            </div>
+          </div>
+        </section>
+
+        <!-- 03 // SOFTWARE & SKILLS SECTION -->
         <section id="software" class="content-section">
           <div class="section-header">
-            <h2>Software &amp; Skills</h2>
-            <span class="meta-label">02 // CODE &amp; TOOLS</span>
+            <h2>Software &amp; Tools</h2>
+            <span class="meta-label"><span class="accent-num">03 //</span> CODE &amp; TOOLS</span>
+          </div>
+
+          <!-- PARALLEL TWIN TOOLS: gotrova (Go) & trova (Node.js) -->
+          <div class="parallel-grid">
+            <article class="parallel-card">
+              <div class="meta-label">CLI &amp; TUI · GO</div>
+              <h3 class="article-entry-title">
+                <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova</a>
+              </h3>
+              <p class="article-subtitle">Go Package Explorer &amp; TUI</p>
+              <p class="article-desc">
+                Interactive terminal user interface for searching and exploring packages across <code>pkg.go.dev</code> without leaving the command line. Built with the Charmbracelet stack (Bubble Tea, Bubbles, Lipgloss) featuring live search, scrollable synopsis cards, and one-key background installation via <code>i</code>.
+              </p>
+              <div class="cli-snippet">
+                <span class="prompt">$</span><code>go install github.com/gafreax/gotrova/cmd/gotrova@latest</code>
+              </div>
+              <div class="article-links">
+                <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer" class="badge badge-accent">GitHub &nearr;</a>
+                <a href="https://pkg.go.dev/github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">pkg.go.dev &nearr;</a>
+              </div>
+            </article>
+
+            <article class="parallel-card">
+              <div class="meta-label">CLI UTILITY · NODE.JS &amp; NPM</div>
+              <h3 class="article-entry-title">
+                <a href="https://www.npmjs.com/package/@gafreax/trova" target="_blank" rel="noopener noreferrer">trova</a>
+              </h3>
+              <p class="article-subtitle">Instant npm Registry Search</p>
+              <p class="article-desc">
+                Fast command-line search utility querying the official npmjs registry directly from your terminal. Displays clean tabular outputs with version, score, and description, offering granular field filters (<code>-f</code>, <code>-x</code>) and instant zero-install execution via <code>npx</code>.
+              </p>
+              <div class="cli-snippet">
+                <span class="prompt">$</span><code>npx @gafreax/trova &lt;package-name&gt;</code>
+              </div>
+              <div class="article-links">
+                <a href="https://www.npmjs.com/package/@gafreax/trova" target="_blank" rel="noopener noreferrer" class="badge badge-accent">npm &nearr;</a>
+                <a href="https://github.com/gafreax/trova" target="_blank" rel="noopener noreferrer">GitHub &nearr;</a>
+              </div>
+            </article>
           </div>
 
           <article class="article-entry">
-            <div class="meta-label">CLI TOOLS · GO &amp; NODE.JS</div>
-            <h3 class="article-entry-title">
-              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">gotrova &amp; trova</a>
-            </h3>
-            <p class="article-desc">
-              Fast command-line utilities to search and inspect packages and file paths directly from the terminal without leaving your workflow. Originally built in Node.js (<code>trova</code>), then re-engineered in Go (<code>gotrova</code>) for instant startup and speed.
-            </p>
-            <div class="article-links">
-              <a href="https://github.com/gafreax/gotrova" target="_blank" rel="noopener noreferrer">github.com/gafreax/gotrova &nearr;</a>
-              <a href="https://github.com/gafreax/trova" target="_blank" rel="noopener noreferrer">github.com/gafreax/trova &nearr;</a>
-            </div>
-          </article>
-
-          <article class="article-entry">
-            <div class="meta-label">WEB TOOLING · TYPESCRIPT</div>
+            <div class="meta-label">WEB TOOLING · TYPESCRIPT &amp; AST</div>
             <h3 class="article-entry-title">
               <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch</a>
             </h3>
+            <p class="article-subtitle">Engine-Agnostic CSS Optimizer &amp; Minifier</p>
             <p class="article-desc">
-              A standalone CSS optimizer and minifier written in TypeScript with zero external dependencies, robust AST parsing, and high compression efficiency.
+              A standalone CSS optimizer and minifier written in TypeScript with zero external dependencies. Engineered specifically for robust cross-engine rendering—especially notoriously brittle environments like <strong>Microsoft Outlook HTML emails</strong>. Deduplicates rules, merges matching selectors, optimizes margin/padding shorthands, and consolidates media queries at the document end. Test transforms and inspect outputs directly in the browser playground.
             </p>
+            <div class="cli-snippet">
+              <span class="prompt">$</span><code>npx @gafreax/csscrunch compile input.css optimized.css</code>
+            </div>
             <div class="article-links">
-              <a href="https://gafreax.github.io/csscrunch/" target="_blank" rel="noopener noreferrer">csscrunch docs &nearr;</a>
-              <a href="https://github.com/gafreax/csscrunch" target="_blank" rel="noopener noreferrer">Source Repo &nearr;</a>
+              <a href="https://gafreax.github.io/csscrunch/examples/playground.html" target="_blank" rel="noopener noreferrer" class="badge badge-accent">Live Playground &nearr;</a>
+              <a href="https://www.npmjs.com/package/@gafreax/csscrunch" target="_blank" rel="noopener noreferrer">npm Package &nearr;</a>
+              <a href="https://github.com/gafreax/csscrunch" target="_blank" rel="noopener noreferrer">GitHub &nearr;</a>
             </div>
           </article>
 
@@ -146,6 +220,7 @@
             <h3 class="article-entry-title">
               <a href="https://github.com/gafreax/skill-seccomp-apparmor-profiler" target="_blank" rel="noopener noreferrer">skill-seccomp-apparmor-profiler</a>
             </h3>
+            <p class="article-subtitle">Automated Syscall Tracing &amp; Policy Synthesis</p>
             <p class="article-desc">
               An automated skill and harness designed to parse Linux runtime syscall traces and synthesize strict Seccomp-BPF allowlists and AppArmor confinement profiles with human-in-the-loop verification.
             </p>
@@ -159,6 +234,7 @@
             <h3 class="article-entry-title">
               <a href="https://github.com/gafreax/xp-mentoring" target="_blank" rel="noopener noreferrer">xp-mentoring</a>
             </h3>
+            <p class="article-subtitle">Craft, Pair Programming &amp; Feedback Routines</p>
             <p class="article-desc">
               Workflows and structured exercises centered on Extreme Programming (XP), pair programming routines, iterative feedback, and teaching software craft to developers.
             </p>
@@ -168,44 +244,119 @@
           </article>
         </section>
 
-        <!-- CONTRIBUTIONS & COMMUNITY SECTION -->
+        <!-- 04 // OPEN SOURCE CONTRIBUTIONS SECTION -->
         <section id="contributions" class="content-section">
           <div class="section-header">
-            <h2>Contributions &amp; Community</h2>
-            <span class="meta-label">03 // ECOSYSTEM</span>
+            <h2>Open Source Contributions</h2>
+            <span class="meta-label"><span class="accent-num">04 //</span> CONTRIBUTIONS</span>
           </div>
 
           <article class="article-entry">
-            <div class="meta-label">OPEN SOURCE · FASTIFY ECOSYSTEM</div>
+            <div class="meta-label">UPSTREAM OPEN SOURCE · FASTIFY ECOSYSTEM</div>
             <h3 class="article-entry-title">
-              Fastify Core &amp; Ecosystem Contributions
+              <a href="https://github.com/fastify/fastify" target="_blank" rel="noopener noreferrer">Fastify Core, fastify-static &amp; fastify-cli</a>
             </h3>
+            <p class="article-subtitle">Upstream Maintenance &amp; Framework Resiliency</p>
             <p class="article-desc">
-              Active contributions across the Fastify ecosystem (including <code>fastify-static</code> and <code>fastify-cli</code>), covering bug fixes, symlink resolution issues, and minimal reproduction cases for upstream maintainers.
+              Active contributions across the Fastify organization, including core HTTP routing optimizations, CLI enhancements in <code>fastify-cli</code>, and bug resolutions in <code>fastify-static</code>—focusing on symlink resolution quirks, URL decoding anomalies, and cross-platform static asset serving under high concurrency.
             </p>
             <div class="article-links">
-              <a href="https://github.com/fastify/fastify" target="_blank" rel="noopener noreferrer">Fastify Org &nearr;</a>
+              <a href="https://github.com/fastify/fastify" target="_blank" rel="noopener noreferrer" class="badge badge-accent">Fastify Core &nearr;</a>
+              <a href="https://github.com/fastify/fastify-static" target="_blank" rel="noopener noreferrer">fastify-static &nearr;</a>
+              <a href="https://github.com/fastify/fastify-cli" target="_blank" rel="noopener noreferrer">fastify-cli &nearr;</a>
               <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">github.com/gafreax &nearr;</a>
             </div>
           </article>
 
-          <article id="community" class="article-entry">
-            <div class="meta-label">COMMUNITY EVENTS &amp; MEETUPS</div>
+          <article class="article-entry">
+            <div class="meta-label">ENGINEERING DISCIPLINE · UPSTREAM TRIAGE</div>
             <h3 class="article-entry-title">
-              Open Source Saturday &amp; Go Meetup Torino
+              The Art of Minimal Reproductions
             </h3>
+            <p class="article-subtitle">Zero-Noise Test Cases &amp; Root-Cause Isolation</p>
             <p class="article-desc">
-              Engaged in community initiatives and technical exchanges in the Piedmont area:
+              A foundational belief that high-quality open-source participation starts with diagnostic precision. Creating self-contained, single-file reproduction scripts that eliminate external variables, isolate race conditions and protocol edge cases, and provide upstream maintainers with immediately runnable test harnesses to verify and merge fixes confidently.
             </p>
-            <ul style="margin: 0.5rem 0 1rem 1.5rem; color: var(--text-secondary); font-size: var(--text-base); line-height: 1.6;">
-              <li><strong>Open Source Saturday</strong>: Collaborative open-source building and pairing sessions. Follow upcoming editions on <a href="https://lu.ma" target="_blank" rel="noopener noreferrer">Luma</a>.</li>
-              <li><strong>Go Meetup Torino</strong>: Local meetups and deep-dives on the Go programming language, concurrency patterns, and backend architecture.</li>
-            </ul>
             <div class="article-links">
-              <a href="https://lu.ma" target="_blank" rel="noopener noreferrer" class="badge">Open Source Saturday on Luma &nearr;</a>
-              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer">Community Projects &nearr;</a>
+              <a href="https://github.com/gafreax" target="_blank" rel="noopener noreferrer" class="badge">View GitHub Profile &nearr;</a>
             </div>
           </article>
+        </section>
+
+        <!-- 05 // REGIONAL COMMUNITIES SECTION -->
+        <section id="communities" class="content-section">
+          <div class="section-header">
+            <h2>Regional Communities</h2>
+            <span class="meta-label"><span class="accent-num">05 //</span> COMMUNITIES</span>
+          </div>
+
+          <div id="community" class="community-grid">
+
+            <!-- PUG Torino / GrUSP -->
+            <article class="community-card">
+              <div class="meta-label">DEVELOPER COMMUNITY · TORINO · GRUSP</div>
+              <h3 class="article-entry-title">
+                <a href="https://torino.grusp.org/" target="_blank" rel="noopener noreferrer">PUG Torino (#pugTO)</a>
+              </h3>
+              <p class="article-subtitle">Programmer User Group by GrUSP</p>
+              <p class="article-desc">
+                The local developer and web engineering community in Turin under the national GrUSP network. Active participant and speaker at monthly meetups exploring backend design, runtime internals, and modern software craft.
+              </p>
+              <div class="article-links">
+                <a href="https://torino.grusp.org/" target="_blank" rel="noopener noreferrer" class="badge badge-accent">torino.grusp.org &nearr;</a>
+                <a href="https://www.meetup.com/pug-torino/" target="_blank" rel="noopener noreferrer" class="badge">Meetup &nearr;</a>
+                <a href="https://www.grusp.org/" target="_blank" rel="noopener noreferrer">grusp.org &nearr;</a>
+              </div>
+            </article>
+
+            <!-- AWS User Group Cuneo -->
+            <article class="community-card">
+              <div class="meta-label">CLOUD &amp; INFRASTRUCTURE · CUNEO</div>
+              <h3 class="article-entry-title">
+                <a href="https://www.awsugcuneo.it/" target="_blank" rel="noopener noreferrer">AWS User Group Cuneo</a>
+              </h3>
+              <p class="article-subtitle">Cloud Architecture &amp; Systems Community</p>
+              <p class="article-desc">
+                Community connecting developers, DevOps engineers, and cloud architects across Cuneo and Piedmont. Regular meetups focused on Amazon Web Services, cloud-native resilience, and infrastructure patterns.
+              </p>
+              <div class="article-links">
+                <a href="https://www.awsugcuneo.it/" target="_blank" rel="noopener noreferrer" class="badge badge-accent">awsugcuneo.it &nearr;</a>
+                <a href="https://www.meetup.com/aws-cuneo/" target="_blank" rel="noopener noreferrer" class="badge">Meetup &nearr;</a>
+              </div>
+            </article>
+
+            <!-- Open Source Saturday Torino -->
+            <article class="community-card">
+              <div class="meta-label">COLLABORATIVE HACKING · TORINO</div>
+              <h3 class="article-entry-title">
+                <a href="https://luma.com/opensourcesaturdaytorino" target="_blank" rel="noopener noreferrer">Open Source Saturday</a>
+              </h3>
+              <p class="article-subtitle">Hands-on OSS Building &amp; Pairing</p>
+              <p class="article-desc">
+                Bi-weekly Saturday morning sessions hosted at innovation hubs like Toolbox Coworking and OGR Tech. A collaborative space for pair programming, contributing to open-source codebases, and mentoring in person.
+              </p>
+              <div class="article-links">
+                <a href="https://luma.com/opensourcesaturdaytorino" target="_blank" rel="noopener noreferrer" class="badge badge-accent">Luma Calendar &nearr;</a>
+              </div>
+            </article>
+
+            <!-- Go Meetup Torino -->
+            <article class="community-card">
+              <div class="meta-label">SYSTEMS &amp; CONCURRENCY · TORINO</div>
+              <h3 class="article-entry-title">
+                <a href="https://www.meetup.com/golang-torino/" target="_blank" rel="noopener noreferrer">Go Meetup Torino</a>
+              </h3>
+              <p class="article-subtitle">Golang Architecture &amp; Systems</p>
+              <p class="article-desc">
+                Local network of Go developers and distributed systems enthusiasts. Deep dives into Go runtime mechanics, concurrency idioms, memory profiling, and high-throughput backend services.
+              </p>
+              <div class="article-links">
+                <a href="https://www.meetup.com/golang-torino/" target="_blank" rel="noopener noreferrer" class="badge badge-accent">Meetup &nearr;</a>
+                <a href="https://t.me/golangtorino" target="_blank" rel="noopener noreferrer" class="badge">Telegram &nearr;</a>
+              </div>
+            </article>
+
+          </div>
         </section>
 
       </div>
@@ -217,7 +368,7 @@
         <div class="info-box">
           <div class="info-box-header">
             <span>INFOGRAPHIC</span>
-            <span>FIG. 01</span>
+            <span class="accent-tag">FIG. 01</span>
           </div>
           <p class="meta-label" style="margin-bottom: 0.5rem;">CONTAINER DEFENSE IN DEPTH</p>
           <div class="diagram-box">+-----------------------------------+
@@ -266,7 +417,7 @@
             </li>
             <li>
               <span class="label">COMMUNITY</span>
-              <span class="val">OSS Saturday · Go Torino</span>
+              <span class="val">PUGTO · AWS Cuneo · OSS · Go</span>
             </li>
           </ul>
         </div>
@@ -314,7 +465,10 @@
           <li><a href="https://www.linkedin.com/in/gabrielefontana/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
           <li><a href="mailto:gafreax@gmail.com">Email</a></li>
           <li><a href="#talks">Talks</a></li>
+          <li><a href="#writings">Writings</a></li>
           <li><a href="#software">Software</a></li>
+          <li><a href="#contributions">Contributions</a></li>
+          <li><a href="#communities">Communities</a></li>
         </ul>
       </div>
     </footer>
