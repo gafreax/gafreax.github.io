@@ -87,9 +87,9 @@ fi
 echo "--- Checking Internal Links in HTML files ---"
 check_internal_links() {
   local file="$1"
-  # Extract local hrefs matching *.html
+  # Strip HTML comments before extracting local hrefs matching *.html
   local links
-  links=$(grep -oE 'href="[a-zA-Z0-9_\.\-]+\.html(#?[a-zA-Z0-9_\-]*)?"' "$file" | sed 's/href="//;s/"//' || true)
+  links=$(perl -0777 -pe 's/<!--.*?-->//gs' "$file" | grep -oE 'href="[a-zA-Z0-9_\.\-]+\.html(#?[a-zA-Z0-9_\-]*)?"' | sed 's/href="//;s/"//' || true)
 
   for link in $links; do
     local target_file

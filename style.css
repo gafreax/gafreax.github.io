@@ -561,6 +561,7 @@ a:hover {
 .article-links {
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-4);
   margin-top: var(--space-3);
   font-family: var(--font-mono);
@@ -568,6 +569,9 @@ a:hover {
 }
 
 .article-links a {
+  display: inline-flex;
+  align-items: center;
+  line-height: 1.2;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
